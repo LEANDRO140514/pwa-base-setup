@@ -31,47 +31,6 @@ function FadeUp({
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-const TIMELINE = [
-  { year: '1987', title: 'Fundación', desc: 'Se funda la institución con la visión de ofrecer educación accesible y de calidad en Mérida, Yucatán.' },
-  { year: '1992', title: 'Reconocimiento', desc: 'Obtención del primer RVOE y consolidación como institución educativa reconocida por la SEP.' },
-  { year: '2005', title: 'Expansión', desc: 'Ampliación de la oferta académica con nuevas licenciaturas y modalidades de estudio.' },
-  { year: 'Hoy', title: 'Actualidad', desc: 'Más de 30 años formando profesionistas. 12 programas activos en modalidades presencial, en línea y sabatina.' },
-]
-
-const FACULTY = [
-  {
-    name: 'Escuela de Negocios, Leyes y Sociedad',
-    color: '#0F2A5E',
-    accent: '#E6B400',
-    programs: ['Lic. en Derecho', 'Lic. en Derecho (Online)', 'Lic. en Negocios Internacionales', 'Lic. en Ventas y Mercadotecnia', 'Lic. en Administración (Sabatina)'],
-    img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&q=80&fit=crop',
-    flip: false,
-  },
-  {
-    name: 'Escuela de Tecnología e Ingeniería',
-    color: '#0c3d6b',
-    accent: '#38BDF8',
-    programs: ['Ingeniería en Sistemas Computacionales'],
-    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80&fit=crop',
-    flip: true,
-  },
-  {
-    name: 'Escuela de Ciencias de la Salud',
-    color: '#064E3B',
-    accent: '#34D399',
-    programs: ['Lic. en Nutrición', 'Lic. en Enfermería', 'Lic. en Psicología'],
-    img: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=900&q=80&fit=crop',
-    flip: false,
-  },
-  {
-    name: 'Escuela de Gastronomía',
-    color: '#78350F',
-    accent: '#FBBF24',
-    programs: ['Lic. en Gastronomía'],
-    img: 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=900&q=80&fit=crop',
-    flip: true,
-  },
-]
 
 const LEADERS = [
   { name: 'QBA. Hugo Pacheco Vázquez MGE.', role: 'Rector', desc: 'Fundador y rector de Universidad Latino con más de 30 años dedicados a la educación superior en Mérida.', img: '/rector-hugo-pacheco.webp' },
@@ -107,7 +66,6 @@ const BUHOS_TIMELINE = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Universidad() {
-  const [activeYear, setActiveYear] = useState(0)
   const [activeBuhoYear, setActiveBuhoYear] = useState(0)
 
   // Parallax ref for Búhos section
