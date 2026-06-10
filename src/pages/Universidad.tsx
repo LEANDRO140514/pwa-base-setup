@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import TopBar from '@/components/layout/TopBar'
 import HistoryStorySection from '@/components/HistoryStorySection'
@@ -41,16 +42,16 @@ const LEADERS = [
 
 const INFRA = [
   { label: 'Laboratorios', sub: 'Equipados para práctica clínica y experimental', img: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=700&q=80&fit=crop' },
-  { label: 'Centros de Cómputo', sub: 'Tecnología actualizada para tu formación digital', img: 'https://images.unsplash.com/photo-1550439062-609e1531270e?w=700&q=80&fit=crop' },
-  { label: 'Espacios Académicos', sub: 'Aulas diseñadas para el aprendizaje activo', img: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=700&q=80&fit=crop' },
-  { label: 'Áreas de Convivencia', sub: 'Espacios para la vida universitaria plena', img: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=700&q=80&fit=crop' },
+  { label: 'Centro de Cómputo', sub: 'Tecnología actualizada para tu formación digital', img: '/centro-computo.jpg' },
+  { label: 'Espacios Académicos', sub: 'Aulas diseñadas para el aprendizaje activo', img: '/aulas.jpg' },
+  { label: 'Áreas de Convivencia', sub: 'Espacios para la vida universitaria plena', img: '/espacios-convivencia.jpg' },
 ]
 
 const COMMUNITY_IMGS = [
   'https://images.unsplash.com/photo-1529390079861-591de354faf5?w=700&q=80&fit=crop',
-  'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=700&q=80&fit=crop',
-  'https://images.unsplash.com/photo-1627556704302-624286467c65?w=700&q=80&fit=crop',
-  'https://images.unsplash.com/photo-1562774053-701939374585?w=700&q=80&fit=crop',
+  'http://154.38.173.239:8000/21_estudiantes_polo.webp',
+  '/psi-estudiante.webp',
+  'http://154.38.173.239:8000/14_campus_exterior.webp',
 ]
 
 const BUHOS_TIMELINE = [
@@ -66,6 +67,7 @@ const BUHOS_TIMELINE = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Universidad() {
+  const navigate = useNavigate()
   const [activeBuhoYear, setActiveBuhoYear] = useState(0)
 
   // Parallax ref for Búhos section
@@ -81,7 +83,7 @@ export default function Universidad() {
 
       {/* Mobile TopBar overlay */}
       <div className="md:hidden fixed top-0 inset-x-0 z-50">
-        <TopBar title="Universidad" transparent />
+        <TopBar title="Universidad" transparent showBack onBack={() => navigate(-1)} />
       </div>
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
@@ -308,8 +310,8 @@ export default function Universidad() {
           }}
         >
           <img
-            src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1600&q=80&fit=crop"
-            alt="Búhos deportes"
+            src="https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1600&q=80&fit=crop"
+            alt="Búhos fútbol"
             className="w-full h-full object-cover object-center"
           />
         </motion.div>
@@ -536,7 +538,7 @@ export default function Universidad() {
               <div className="md:col-span-3 rounded-2xl overflow-hidden shadow-md border border-gray-200 transition-transform duration-500 hover:scale-[1.01]">
                 <iframe
                   title="Ubicación Universidad Latino"
-                  src="https://maps.google.com/maps?q=21.0279469,-89.5695554&z=16&output=embed"
+                  src="https://maps.google.com/maps?q=Universidad+Latino&ll=21.0279469,-89.5695554&z=16&output=embed"
                   width="100%"
                   height="380"
                   style={{ border: 0, display: 'block' }}
@@ -563,7 +565,7 @@ export default function Universidad() {
                 </div>
                 <div className="flex flex-col gap-3 mt-1">
                   <a
-                    href="https://maps.app.goo.gl/YpPXjPWbZ8nQd71DA"
+                    href="https://maps.app.goo.gl/hfCMm2qLDH4DSY2W8"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full inline-flex items-center justify-center gap-2 bg-[#1B3070] text-white text-sm font-bold px-5 py-3.5 rounded-xl hover:bg-[#162660] hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm"
@@ -574,7 +576,7 @@ export default function Universidad() {
                     </svg>
                   </a>
                   <a
-                    href="https://maps.app.goo.gl/YpPXjPWbZ8nQd71DA"
+                    href="https://maps.app.goo.gl/hfCMm2qLDH4DSY2W8"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full inline-flex items-center justify-center gap-2 border-2 border-[#1B3070] text-[#1B3070] text-sm font-bold px-5 py-3 rounded-xl hover:bg-[#1B3070]/5 active:scale-95 transition-all"
