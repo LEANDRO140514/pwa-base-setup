@@ -86,7 +86,7 @@ export default function EvaIA() {
       setEvaState(result.state)
 
       // Append advisor CTA for high-intent messages
-      const waNumber = (values.whatsappNumber || '+529996442662').replace('+', '')
+      const waNumber = (values.whatsappNumber || '+529996442662').replace(/\D/g, '')
       const HIGH_INTENT_INTENTS = ['career_detail', 'admission', 'scholarship']
       const needsCTA = HIGH_INTENT_INTENTS.includes(result.intent) && (
         userMsg.content.toLowerCase().includes('me interesa') ||

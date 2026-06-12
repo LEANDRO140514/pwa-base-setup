@@ -40,21 +40,38 @@ function FadeUp({ children, delay = 0, className = '' }: {
 // ─── Area + benefit content ───────────────────────────────────────────────────
 
 const AREA_META: Record<string, { img: string }> = {
-  'Derecho':     { img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80&fit=crop&h=600' },
-  'Salud':       { img: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&fit=crop&h=600' },
-  'Negocios':    { img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&q=80&fit=crop&h=600' },
-  'Gastronomía': { img: 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80&fit=crop&h=600' },
-  'Tecnología':  { img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80&fit=crop&h=600' },
+  'Derecho':     { img: 'http://154.38.173.239:8002/dis-derecho.webp' },
+  'Salud':       { img: 'http://154.38.173.239:8002/dis-salud.webp' },
+  'Negocios':    { img: 'http://154.38.173.239:8002/dis-negocios.webp' },
+  'Gastronomía': { img: 'http://154.38.173.239:8002/dis-gastronomia.webp' },
+  'Tecnología':  { img: 'http://154.38.173.239:8002/dis-tecnologia.webp' },
+}
+
+// ─── Career-specific images (one per career, different from area images) ──────
+
+const CAREER_IMG: Record<string, string> = {
+  'Licenciatura en Derecho':                      'http://154.38.173.239:8001/01_derecho.webp',
+  'Licenciatura en Derecho (Online)':             'http://154.38.173.239:8001/02_derecho_online.webp',
+  'Licenciatura en Psicología':                   'http://154.38.173.239:8001/03_psicologia.webp',
+  'Licenciatura en Enfermería':                   'http://154.38.173.239:8001/04_enfermeria.webp',
+  'Licenciatura en Nutrición':                    'http://154.38.173.239:8001/05_nutricion.webp',
+  'Lic. en Negocios Internacionales':             'http://154.38.173.239:8001/06_negocios_internacionales.webp',
+  'Lic. en Ventas y Mercadotecnia':               'http://154.38.173.239:8001/07_ventas_mercadotecnia.webp',
+  'Lic. en Ventas y Mercadotecnia (Online)':      'http://154.38.173.239:8001/08_ventas_mercadotecnia_online.webp',
+  'Licenciatura en Gastronomía':                  'http://154.38.173.239:8001/12_gastronomia.webp',
+  'Ingeniería en Sistemas Computacionales':        'http://154.38.173.239:8001/11_ingenieria_sistemas.webp',
+  'Licenciatura en Administración (Sabatina)':     'http://154.38.173.239:8001/09_administracion_sabatina.webp',
+  'Lic. en Administración y Desarrollo Empresarial (Online)': 'http://154.38.173.239:8001/10_administracion_online.webp',
 }
 const AREAS = ['Derecho', 'Salud', 'Negocios', 'Gastronomía', 'Tecnología']
 
 const BENEFITS = [
-  { title: 'Validez SEP',          desc: 'Títulos con RVOE reconocidos oficialmente por la Secretaría de Educación Pública.',      img: 'https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=600&q=80&fit=crop&h=500' },
-  { title: 'Flexibilidad',         desc: 'Modalidades presencial, en línea y sabatina para que estudies sin sacrificar tu vida.',   img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80&fit=crop&h=500' },
-  { title: 'Empleabilidad',        desc: 'Programas diseñados junto al sector empresarial del sureste mexicano.',                   img: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80&fit=crop&h=500' },
-  { title: 'Prácticas reales',     desc: 'Laboratorios, clínicas y empresas aliadas para aprendizaje práctico desde el primer año.',img: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80&fit=crop&h=500' },
-  { title: 'Internacionalización', desc: 'Convenios con instituciones extranjeras y movilidad estudiantil internacional.',          img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80&fit=crop&h=500' },
-  { title: 'Tecnología educativa', desc: 'Plataformas digitales, aulas virtuales y herramientas de IA integradas al aprendizaje.',  img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80&fit=crop&h=500' },
+  { title: 'Validez SEP',          desc: 'Títulos con RVOE reconocidos oficialmente por la Secretaría de Educación Pública.',      img: 'http://154.38.173.239:8002/validez-sep.webp' },
+  { title: 'Ubicación',            desc: 'Campus en el norte de Mérida, la zona de mayor plusvalía y crecimiento de la ciudad, cerca de todo.', img: 'http://154.38.173.239:8002/ubicacion.webp' },
+  { title: 'Empleabilidad',        desc: 'Programas diseñados junto al sector empresarial del sureste mexicano.',                   img: 'http://154.38.173.239:8002/empleabilidad.webp' },
+  { title: 'Prácticas reales',     desc: 'Laboratorios, clínicas y empresas aliadas para aprendizaje práctico desde el primer año.',img: 'http://154.38.173.239:8002/practicas-reales.webp' },
+  { title: 'Internacionalización', desc: 'Convenios con instituciones extranjeras y movilidad estudiantil internacional.',          img: 'http://154.38.173.239:8002/internacionalizacion.webp' },
+  { title: 'Tecnología educativa', desc: 'Plataformas digitales, aulas virtuales y herramientas de IA integradas al aprendizaje.',  img: 'http://154.38.173.239:8002/tecnologia-educativa.webp' },
 ]
 
 const MODALITY_LABELS: Record<string, string> = {
@@ -97,13 +114,18 @@ export default function Inicio() {
 
       {/* ── S1: CINEMATIC INTRO ─────────────────────────────────────────────── */}
       <section className="relative flex flex-col items-center justify-center h-screen bg-[#06090f] overflow-hidden">
+        {/* Background image with dark overlay */}
+        <div className="absolute inset-0">
+          <img src="/portada-unilatino.jpg" alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full"
             style={{ background: 'radial-gradient(circle, rgba(27,48,112,0.5) 0%, transparent 68%)', animation: 'cinePulse 7s ease-in-out infinite' }} />
         </div>
         <div className="relative z-10 flex flex-col items-center text-center px-8" style={{ animation: 'fadeUp 1s ease 0.3s both' }}>
           <p className="text-[#E6B400] text-xs font-black uppercase tracking-[0.45em] mb-3">{values.appName}</p>
-          <p className="text-white/30 text-sm tracking-widest">Mérida, Yucatán · Desde 1987</p>
+          <p className="text-white/70 text-sm tracking-widest">Mérida, Yucatán · Desde 1987</p>
         </div>
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3" style={{ animation: 'fadeUp 1s ease 1.1s both' }}>
           <span className="text-white/20 text-[10px] uppercase tracking-[0.3em]">Explorar</span>
@@ -113,7 +135,7 @@ export default function Inicio() {
 
       {/* ── S2: HERO PRINCIPAL ──────────────────────────────────────────────── */}
       <section className="relative flex items-end min-h-screen overflow-hidden bg-[#1B3070]">
-        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600&q=80&fit=crop" alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <img src="/aulas.jpg" alt="" className="absolute inset-0 w-full h-full object-cover" />
         <video autoPlay muted loop playsInline preload="none"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ opacity: 0, transition: 'opacity 1.5s ease' }}
@@ -242,8 +264,8 @@ export default function Inicio() {
 
       {/* ── S6: BLOQUE DE CONVERSIÓN ────────────────────────────────────────── */}
       <section className="relative flex items-center min-h-[60vh] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=80&fit=crop" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#06090f]/92 via-[#06090f]/65 to-transparent" />
+        <img src="/inscripciones-bg.jpg" alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#06090f]/95 via-[#06090f]/75 to-[#06090f]/30" />
         <FadeUp className="relative z-10 w-full max-w-7xl mx-auto px-8 md:px-16 py-20">
           <p className="text-[#E6B400] text-xs font-black uppercase tracking-[0.35em] mb-5">Inscripciones Abiertas</p>
           <h2 className="text-white font-black text-[2.2rem] md:text-[3.5rem] leading-tight tracking-tight mb-4 max-w-lg">
@@ -267,9 +289,6 @@ export default function Inicio() {
           <FadeUp className="mb-12">
             <div className="flex items-center gap-3 mb-4">
               <p className="text-[#E6B400] text-xs font-black uppercase tracking-[0.3em]">Encuéntranos</p>
-              <span className="inline-flex items-center gap-1 bg-[#E6B400]/15 text-[#B8900A] text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border border-[#E6B400]/30">
-                ★ Zona de alta plusvalía
-              </span>
             </div>
             <h2 className="text-[#1B3070] font-black text-3xl md:text-4xl tracking-tight leading-tight mb-3">
               Ubicación privilegiada<br />en el norte de Mérida
@@ -281,7 +300,7 @@ export default function Inicio() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
             <div className="lg:col-span-3 rounded-2xl overflow-hidden shadow-xl h-80 lg:h-96 ring-1 ring-black/5">
               <iframe title="Universidad Latino"
-                src="https://maps.google.com/maps?q=21.0279469,-89.5695554&z=16&output=embed"
+                src="https://maps.google.com/maps?q=Universidad+Latino&ll=21.0279469,-89.5695554&z=16&output=embed"
                 className="w-full h-full border-0" loading="lazy" />
             </div>
             <div className="lg:col-span-2 flex flex-col gap-6 pt-2">
@@ -462,8 +481,8 @@ function BenefitCard({ title, desc, img }: { title: string; desc: string; img: s
   return (
     <div className="relative group overflow-hidden rounded-2xl aspect-[4/3] bg-gray-900 cursor-default">
       <img src={img} alt={title} loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-75" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:via-black/40 transition-all duration-500" />
+        className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       <div className="absolute inset-0 flex flex-col justify-end p-6">
         <h3 className="text-white font-black text-xl tracking-tight mb-2 transition-transform duration-300 group-hover:translate-y-0">{title}</h3>
         <p className="text-white/60 text-sm leading-relaxed max-h-0 overflow-hidden group-hover:max-h-20 transition-all duration-500 group-hover:text-white/80">
@@ -475,7 +494,7 @@ function BenefitCard({ title, desc, img }: { title: string; desc: string; img: s
 }
 
 function CareerCard({ career, delay, onClick }: { career: Career; delay: number; onClick: () => void }) {
-  const img = AREA_META[career.area]?.img ?? AREA_META['Negocios'].img
+  const img = CAREER_IMG[career.name] ?? AREA_META[career.area]?.img ?? AREA_META['Negocios'].img
   return (
     <FadeUp delay={delay}>
       <div onClick={onClick}

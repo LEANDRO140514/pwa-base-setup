@@ -41,17 +41,17 @@ const LEADERS = [
 ]
 
 const INFRA = [
-  { label: 'Laboratorios', sub: 'Equipados para práctica clínica y experimental', img: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=700&q=80&fit=crop' },
+  { label: 'Espacios de aprendizaje práctico', sub: 'Formación aplicada profesional', img: 'http://154.38.173.239:8002/comedor-practicas.webp' },
   { label: 'Centro de Cómputo', sub: 'Tecnología actualizada para tu formación digital', img: '/centro-computo.jpg' },
   { label: 'Espacios Académicos', sub: 'Aulas diseñadas para el aprendizaje activo', img: '/aulas.jpg' },
   { label: 'Áreas de Convivencia', sub: 'Espacios para la vida universitaria plena', img: '/espacios-convivencia.jpg' },
 ]
 
 const COMMUNITY_IMGS = [
-  'https://images.unsplash.com/photo-1529390079861-591de354faf5?w=700&q=80&fit=crop',
-  'http://154.38.173.239:8000/21_estudiantes_polo.webp',
+  '/galeria/buhos-1.jpg',
+  'http://154.38.173.239:8002/estudiantes.webp',
   '/psi-estudiante.webp',
-  'http://154.38.173.239:8000/14_campus_exterior.webp',
+  'http://154.38.173.239:8002/vista-aulas.webp',
 ]
 
 const BUHOS_TIMELINE = [
@@ -96,7 +96,7 @@ export default function Universidad() {
           transition={{ duration: 1.8, ease: 'easeOut' }}
         >
           <img
-            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1600&q=80&fit=crop"
+            src="http://154.38.173.239:8002/entrada.webp"
             alt="Comunidad universitaria"
             className="w-full h-full object-cover object-center"
           />
@@ -183,7 +183,7 @@ export default function Universidad() {
           transition={{ duration: 1.4, ease: 'easeOut' }}
         >
           <img
-            src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=1600&q=80&fit=crop"
+            src="http://154.38.173.239:8002/deportes.webp"
             alt="Orgullo Búhos UNILATINO"
             className="w-full h-full object-cover object-center"
           />
@@ -278,7 +278,7 @@ export default function Universidad() {
               </div>
               {/* Top right wide */}
               <div className="col-span-1 md:col-span-2 overflow-hidden rounded-2xl group">
-                <img src={COMMUNITY_IMGS[1]} alt="Vida universitaria" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src={COMMUNITY_IMGS[1]} alt="Vida universitaria" className="w-full h-full object-scale-down transition-transform duration-700 group-hover:scale-105" />
               </div>
               {/* Bottom right 1 */}
               <div className="overflow-hidden rounded-2xl group">
@@ -310,8 +310,8 @@ export default function Universidad() {
           }}
         >
           <img
-            src="https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1600&q=80&fit=crop"
-            alt="Búhos fútbol"
+            src="/galeria/buhos-2.jpg"
+            alt="Búhos UNILATINO"
             className="w-full h-full object-cover object-center"
           />
         </motion.div>
@@ -447,7 +447,7 @@ export default function Universidad() {
             {/* Foto 2 */}
             <FadeUp delay={0.08}>
               <div className="rounded-2xl overflow-hidden h-[140px] md:h-[190px] group">
-                <img src="/galeria/buhos-2.jpg" alt="Búhos UNILATINO" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src="http://154.38.173.239:8002/futbol-equipo.webp" alt="Búhos UNILATINO" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
             </FadeUp>
 

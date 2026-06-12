@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useAdmin } from '@/context/AdminContext'
 import { useTestModal } from '@/context/TestModalContext'
 
@@ -46,22 +47,27 @@ function FadeUp({
   )
 }
 
+const stagger = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (custom: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const, delay: 0.1 + custom * 0.15 },
+  }),
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Intro() {
   const { values } = useAdmin()
   const navigate = useNavigate()
   const { openTest } = useTestModal()
-  const waNumber = (values.whatsappNumber || '+529996442662').replace('+', '')
+  const waNumber = (values.whatsappNumber || '+529996442662').replace(/\D/g, '')
 
   return (
     <div className="w-full overflow-x-hidden">
 
       <style>{`
-        @keyframes heroEntrance {
-          from { opacity: 0; transform: translateY(28px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
         @keyframes scrollChevron {
           0%, 100% { opacity: 0.4; transform: translateY(0); }
           50%       { opacity: 0.9; transform: translateY(8px); }
@@ -69,16 +75,19 @@ export default function Intro() {
       `}</style>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* SECTION 1 — HERO                                                    */}
+      {/* SECTION 1 — INTRO CINEMATIC                                        */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section className="relative w-full min-h-screen overflow-hidden bg-[#0a0f1e]">
 
-        {/* Fallback image */}
-        <img
-          src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {/* Background image with dark overlay */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80"
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
 
         {/* Video background */}
         <video
@@ -93,24 +102,48 @@ export default function Intro() {
         {/* Overlays */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80" />
 
-        {/* Content */}
-        <div
-          className="relative z-10 flex flex-col items-start justify-end min-h-screen px-8 pb-20"
-          style={{ animation: 'heroEntrance 1s ease 0.2s both' }}
-        >
-          <p className="text-[#E6B400] text-[10px] font-black uppercase tracking-[0.32em] mb-5">
+        {/* Content with Framer Motion */}
+        <div className="relative z-10 flex flex-col items-start justify-end min-h-screen px-8 pb-20">
+          <motion.p
+            custom={0}
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+            className="text-[#E6B400] text-[10px] font-black uppercase tracking-[0.32em] mb-5"
+          >
             Universidad Latino · Mérida, Yucatán
-          </p>
-          <h1 className="text-white font-black text-5xl leading-[0.95] tracking-tight mb-6 max-w-xs">
+          </motion.p>
+
+          <motion.h1
+            custom={1}
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+            className="text-white font-black text-5xl leading-[0.95] tracking-tight mb-6 max-w-xs"
+          >
             Tu futuro comienza aquí
-          </h1>
-          <p className="text-white/50 text-base leading-relaxed mb-10 max-w-xs">
+          </motion.h1>
+
+          <motion.p
+            custom={2}
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+            className="text-white/50 text-base leading-relaxed mb-10 max-w-xs"
+          >
             No elijas una carrera al azar. Descubre la que realmente es para ti con inteligencia artificial.
-          </p>
-          <div className="flex flex-col gap-3 w-full max-w-xs">
+          </motion.p>
+
+          <motion.div
+            custom={3}
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-3 w-full max-w-xs"
+          >
             <button
               onClick={openTest}
-              className="flex items-center justify-center gap-2 bg-[#E6B400] text-[#1B3070] font-black px-6 py-4 rounded-full text-sm shadow-[0_8px_32px_rgba(230,180,0,0.35)] active:scale-95 transition-transform"
+              className="flex items-center justify-center gap-2 bg-[#E6B400] text-[#1B3070] font-black px-6 py-4 rounded-full text-sm shadow-[0_8px_32px_rgba(230,180,0,0.35)] hover:brightness-105 hover:shadow-[0_12px_40px_rgba(230,180,0,0.50)] hover:scale-[1.02] active:scale-95 transition-all"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 flex-shrink-0">
                 <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
@@ -121,18 +154,23 @@ export default function Intro() {
               href={`https://wa.me/${waNumber}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 text-white font-semibold px-6 py-4 rounded-full text-sm border border-white/30 hover:bg-white/10 active:scale-95 transition-transform"
+              className="flex items-center justify-center gap-2 text-white font-semibold px-6 py-4 rounded-full text-sm border border-white/30 hover:bg-white/10 hover:scale-[1.02] active:scale-95 transition-all"
             >
               Hablar con un asesor
             </a>
-          </div>
+          </motion.div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 right-8 flex flex-col items-center gap-1.5" style={{ animation: 'heroEntrance 1s ease 1s both' }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6 }}
+          className="absolute bottom-8 right-8 flex flex-col items-center gap-1.5"
+        >
           <span className="text-white/30 text-[9px] uppercase tracking-widest" style={{ writingMode: 'vertical-lr' }}>Scroll</span>
           <div className="w-px h-12 bg-gradient-to-b from-white/30 to-transparent" />
-        </div>
+        </motion.div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────────── */}
@@ -163,8 +201,6 @@ export default function Intro() {
       {/* SECTION 3 — TENSION                                                 */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section className="relative w-full min-h-screen overflow-hidden bg-[#0a0f1e]">
-
-        {/* Subtle second video — lower opacity */}
         <video
           autoPlay muted loop playsInline preload="none"
           className="absolute inset-0 w-full h-full object-cover opacity-25"
@@ -173,7 +209,6 @@ export default function Intro() {
           <source src="https://videos.pexels.com/video-files/3195394/3195394-hd_1280_720_25fps.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/60 to-[#0a0f1e]/95" />
-
         <div className="relative z-10 w-full px-8 py-24 flex flex-col justify-center min-h-screen">
           <FadeUp delay={0}>
             <span className="block text-[10px] font-black uppercase tracking-[0.28em] text-white/25 mb-8">La realidad</span>
@@ -198,8 +233,6 @@ export default function Intro() {
       {/* SECTION 4 — SOLUTION                                                */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section className="relative w-full min-h-screen bg-[#1B3070] overflow-hidden">
-
-        {/* Decorative dot grid */}
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -207,7 +240,6 @@ export default function Intro() {
             backgroundSize: '32px 32px',
           }}
         />
-
         <div className="relative z-10 w-full px-8 py-24 flex flex-col justify-center min-h-screen">
           <FadeUp delay={0}>
             <span className="block text-[10px] font-black uppercase tracking-[0.28em] text-[#E6B400] mb-8">Nuestra diferencia</span>
@@ -217,7 +249,6 @@ export default function Intro() {
               Por eso en Universidad Latino lo hacemos diferente.
             </h2>
           </FadeUp>
-
           <div className="space-y-10">
             {[
               {
@@ -255,7 +286,6 @@ export default function Intro() {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <section className="relative w-full min-h-screen bg-white overflow-hidden">
         <div className="w-full px-8 py-24 flex flex-col justify-center min-h-screen">
-
           <FadeUp delay={0}>
             <span className="block text-[10px] font-black uppercase tracking-[0.28em] text-gray-300 mb-8">Empieza ahora</span>
           </FadeUp>
@@ -267,8 +297,6 @@ export default function Intro() {
           <FadeUp delay={150}>
             <p className="text-gray-300 text-2xl font-black mb-16">Te guiamos paso a paso.</p>
           </FadeUp>
-
-          {/* Action rows — minimal, no heavy cards */}
           <div className="space-y-1">
             {[
               {
@@ -320,7 +348,6 @@ export default function Intro() {
               )
             })}
           </div>
-
           <FadeUp delay={550}>
             <button
               onClick={() => {

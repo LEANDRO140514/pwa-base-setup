@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAdmin } from '@/context/AdminContext'
 import type { Career } from '@/context/AdminContext'
@@ -233,6 +233,66 @@ function JobIcon({ type }: { type: string }) {
   }
 }
 
+// ─── HTML builder for downloadable PDF-style brochure ─────────────────────────
+
+function buildCareerHTML(career: Career, curriculum: string[][], values: Record<string, any>) {
+  const subjects = curriculum.map((sems, i) =>
+    `<tr><td style="font-weight:700;color:#1B3070;padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:13px">Semestre ${i + 1}</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#4b5563;font-size:13px">${sems.join(' · ')}</td></tr>`
+  ).join('')
+  const modLabel = { presencial: 'Presencial', 'en-linea': 'En Línea', sabatina: 'Sabatina' }[career.modality] ?? career.modality
+  return `<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>${career.name} | Universidad Latino</title>
+<style>
+  @page { margin: 1.5cm; size: A4; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; color:#111827; margin:0; padding:0; line-height:1.5; }
+  .hero { background:#1B3070; padding:40px 48px; color:#fff; }
+  .hero h1 { font-size:28px; font-weight:900; margin:0 0 6px; letter-spacing:-0.02em; }
+  .hero p { font-size:14px; color:#94a3b8; margin:0; }
+  .badge { display:inline-block; background:#E6B400; color:#1B3070; font-weight:900; font-size:11px; padding:4px 14px; border-radius:999px; margin-top:12px; }
+  .section { padding:32px 48px; }
+  .section-title { font-size:18px; font-weight:900; color:#1B3070; margin:0 0 12px; letter-spacing:-0.01em; }
+  .desc { color:#4b5563; font-size:14px; line-height:1.7; margin:0 0 24px; }
+  .grid-2 { display:flex; gap:16px; flex-wrap:wrap; }
+  .stat { flex:1; min-width:120px; background:#f8fafc; border-radius:12px; padding:16px; text-align:center; }
+  .stat-num { font-size:22px; font-weight:900; color:#1B3070; }
+  .stat-label { font-size:12px; color:#6b7280; margin-top:4px; }
+  table { width:100%; border-collapse:collapse; border-radius:12px; overflow:hidden; }
+  th { background:#1B3070; color:#fff; font-size:13px; font-weight:700; padding:10px 12px; text-align:left; }
+  .footer { border-top:2px solid #e5e7eb; padding:24px 48px; font-size:12px; color:#9ca3af; text-align:center; }
+  .footer strong { color:#1B3070; }
+</style></head><body>
+<div class="hero">
+  <h1>${career.name}</h1>
+  <p>${career.area} · ${modLabel} · ${values.appName || 'Universidad Latino'}</p>
+  <div class="badge">${career.duration}</div>
+</div>
+<div class="section">
+  <h2 class="section-title">Acerca del programa</h2>
+  <p class="desc">${career.description || ''}</p>
+  <div class="grid-2">
+    ${career.enrollment ? `<div class="stat"><div class="stat-num">${career.enrollment}</div><div class="stat-label">Inscripción</div></div>` : ''}
+    ${career.monthlyFee ? `<div class="stat"><div class="stat-num">${career.monthlyFee}</div><div class="stat-label">Mensualidad</div></div>` : ''}
+    <div class="stat"><div class="stat-num">${curriculum.length}</div><div class="stat-label">Semestres</div></div>
+    <div class="stat"><div class="stat-num">${modLabel}</div><div class="stat-label">Modalidad</div></div>
+  </div>
+</div>
+<div class="section">
+  <h2 class="section-title">Plan de estudios</h2>
+  <table><thead><tr><th style="width:140px">Semestre</th><th>Materias</th></tr></thead><tbody>${subjects}</tbody></table>
+</div>
+<div class="section" style="background:#f8fafc;border-radius:12px;margin:0 48px 32px;padding:24px">
+  <p style="font-size:14px;color:#4b5563;margin:0 0 8px;font-weight:700">¿Listo para comenzar?</p>
+  <p style="font-size:13px;color:#6b7280;margin:0">Contáctanos por WhatsApp para iniciar tu proceso de admisi&oacute;n.</p>
+  <p style="font-size:13px;color:#1B3070;margin-top:8px"><strong>${values.contactPhone || '999-943-5386'}</strong> · ${values.contactEmail || 'informes@universidadlatino.edu.mx'}</p>
+</div>
+<div class="footer">
+  <strong>${values.appName || 'Universidad Latino'}</strong> · ${values.address || 'Mérida, Yucatán'} · RVOE SEP<br>
+  Documento generado el ${new Date().toLocaleDateString('es-MX', { year:'numeric',month:'long',day:'numeric' })}
+</div>
+</body></html>`
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function CarreraDetalle() {
@@ -279,6 +339,22 @@ export default function CarreraDetalle() {
     }
     return () => { localStorage.removeItem('evaCareerContext') }
   }, [career])
+
+  // Must define all hooks before any early return (React Rules of Hooks)
+  const handleDownloadHTML = useCallback(() => {
+    if (!career) return
+    const curric = CURRICULUM[career.area] ?? CURRICULUM['Negocios']
+    const html = buildCareerHTML(career, curric, values)
+    const blob = new Blob([html], { type: 'text/html' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${career.name.replace(/[\s/]+/g, '-')}.html`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }, [career, values])
 
   if (career === undefined) {
     return (
@@ -556,7 +632,7 @@ export default function CarreraDetalle() {
               <p className="text-gray-400 text-sm mt-1">{curriculum.length} semestres · Plan de estudios vigente</p>
             </div>
             <button
-              onClick={() => window.print()}
+              onClick={handleDownloadHTML}
               className="flex items-center gap-1.5 text-[#1B3070] text-xs font-bold border border-[#1B3070]/20 px-4 py-2 rounded-full hover:bg-[#1B3070]/5 active:scale-95 transition-all"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">

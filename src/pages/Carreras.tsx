@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import TopBar from '@/components/layout/TopBar'
 import { supabase } from '@/lib/supabase'
@@ -23,11 +23,41 @@ interface Career {
 // ─── Area images ──────────────────────────────────────────────────────────────
 
 const AREA_IMG: Record<string, string> = {
-  'Derecho':     'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&q=80&fit=crop',
-  'Salud':       'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=80&fit=crop',
-  'Negocios':    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1600&q=80&fit=crop',
-  'Gastronomía': 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=1600&q=80&fit=crop',
-  'Tecnología':  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80&fit=crop',
+  'Derecho':     '/aulas.jpg',
+  'Salud':       '/psi-estudiante.webp',
+  'Negocios':    '/entrada-principal.jpg',
+  'Gastronomía': '/espacios-convivencia.jpg',
+  'Tecnología':  '/centro-computo.jpg',
+}
+
+// ─── Career-specific images ────────────────────────────────────────────────────
+
+const CAREER_IMG: Record<string, string> = {
+  // Supabase names (short)
+  'Derecho':                                         'http://154.38.173.239:8001/01_derecho.webp',
+  'Derecho Online':                                  'http://154.38.173.239:8001/02_derecho_online.webp',
+  'Psicología':                                      'http://154.38.173.239:8001/03_psicologia.webp',
+  'Enfermería':                                      'http://154.38.173.239:8001/04_enfermeria.webp',
+  'Nutrición':                                       'http://154.38.173.239:8001/05_nutricion.webp',
+  'Negocios Internacionales':                        'http://154.38.173.239:8001/06_negocios_internacionales.webp',
+  'Ventas y Mercadotecnia':                          'http://154.38.173.239:8001/07_ventas_mercadotecnia.webp',
+  'Ventas y Mercadotecnia Online':                   'http://154.38.173.239:8001/08_ventas_mercadotecnia_online.webp',
+  'Gastronomía':                                     'http://154.38.173.239:8001/12_gastronomia.webp',
+  'Ingeniería en Sistemas Computacionales':           'http://154.38.173.239:8001/11_ingenieria_sistemas.webp',
+  'Administración Sabatina':                         'http://154.38.173.239:8001/09_administracion_sabatina.webp',
+  'Administración y Desarrollo Empresarial Online':  'http://154.38.173.239:8001/10_administracion_online.webp',
+  // AdminContext names (full - fallback)
+  'Licenciatura en Derecho':                      'http://154.38.173.239:8001/01_derecho.webp',
+  'Licenciatura en Derecho (Online)':             'http://154.38.173.239:8001/02_derecho_online.webp',
+  'Licenciatura en Psicología':                   'http://154.38.173.239:8001/03_psicologia.webp',
+  'Licenciatura en Enfermería':                   'http://154.38.173.239:8001/04_enfermeria.webp',
+  'Licenciatura en Nutrición':                    'http://154.38.173.239:8001/05_nutricion.webp',
+  'Lic. en Negocios Internacionales':             'http://154.38.173.239:8001/06_negocios_internacionales.webp',
+  'Lic. en Ventas y Mercadotecnia':               'http://154.38.173.239:8001/07_ventas_mercadotecnia.webp',
+  'Lic. en Ventas y Mercadotecnia (Online)':      'http://154.38.173.239:8001/08_ventas_mercadotecnia_online.webp',
+  'Licenciatura en Gastronomía':                  'http://154.38.173.239:8001/12_gastronomia.webp',
+  'Licenciatura en Administración (Sabatina)':     'http://154.38.173.239:8001/09_administracion_sabatina.webp',
+  'Lic. en Administración y Desarrollo Empresarial (Online)': 'http://154.38.173.239:8001/10_administracion_online.webp',
 }
 
 const MODALITY_LABELS: Record<string, string> = {
@@ -94,7 +124,7 @@ function CareerSection({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const bgImg = career.image || AREA_IMG[career.area] || AREA_IMG['Negocios']
+  const bgImg = career.image || CAREER_IMG[career.name] || AREA_IMG[career.area] || CAREER_IMG['Nutrición']
 
   const contentVariants = {
     hidden: { opacity: 0, y: 28 },
@@ -279,6 +309,7 @@ function SnapSkeleton() {
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function Carreras() {
+  const navigate = useNavigate()
   const { values } = useAdmin()
   const [careers, setCareers] = useState<Career[]>(careersCache ?? [])
   const [loading, setLoading] = useState(careersCache === null)
@@ -379,6 +410,18 @@ export default function Carreras() {
       <div className="absolute inset-x-0 top-0 z-50 md:hidden">
         <TopBar transparent />
       </div>
+
+      {/* Back button — top-right, visible on all backgrounds */}
+      <button
+        onClick={() => navigate(-1)}
+        className="fixed top-3 right-4 md:top-4 md:right-8 z-50 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 text-white text-xs font-semibold hover:bg-[#E6B400] hover:text-[#1B3070] hover:border-[#E6B400] transition-all duration-200"
+        aria-label="Volver atrás"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+          <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+        </svg>
+        Volver
+      </button>
 
       {/* Continuous scroll container — no snap, catalog feel */}
       <div

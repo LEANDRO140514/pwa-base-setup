@@ -22,6 +22,7 @@ export interface Career {
   monthlyFee?: string
   enrollment?: string
   highlights?: string[]
+  pdfUrl?: string
   active: boolean
 }
 

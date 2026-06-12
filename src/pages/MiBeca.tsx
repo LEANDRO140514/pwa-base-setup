@@ -134,7 +134,7 @@ export default function MiBeca() {
 
   return (
     <div className="flex flex-col min-h-dvh bg-white">
-      <TopBar title="Mi Beca" />
+      <TopBar title="Mi Beca" showBack onBack={() => navigate(-1)} />
       <PageLayout>
 
         {step === 'info' && (
@@ -142,7 +142,7 @@ export default function MiBeca() {
             {/* Back button */}
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-1.5 text-sm font-semibold text-[#1B3070] pt-4 pb-2 hover:opacity-70 active:scale-95 transition-all"
+              className="flex items-center gap-1.5 text-base font-semibold text-[#1B3070] pt-4 pb-2 hover:opacity-70 active:scale-95 transition-all"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                 <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
@@ -156,10 +156,10 @@ export default function MiBeca() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
                 </svg>
               </div>
-              <h1 className="font-black text-[#1B3070] text-[2rem] leading-[1.1]">
+              <h1 className="font-black text-[#1B3070] text-[2.6rem] md:text-[3.2rem] leading-[1.05]">
                 Calcula tu beca
               </h1>
-              <p className="text-gray-400 text-sm mt-3">
+              <p className="text-gray-400 text-lg md:text-xl mt-3">
                 Tu promedio define tu nivel. Descúbrelo en segundos.
               </p>
             </div>
@@ -169,9 +169,9 @@ export default function MiBeca() {
               <div className="mb-5 p-4 rounded-2xl bg-[#1B3070]/5 border border-[#1B3070]/15">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#1B3070]/60 mb-1.5">Carrera seleccionada</p>
-                    <p className="font-black text-[#1B3070] text-sm leading-tight mb-2">{selectedCareer.name}</p>
-                    <div className="flex gap-4 text-xs text-gray-500 flex-wrap">
+                    <p className="text-sm font-black uppercase tracking-[0.18em] text-[#1B3070]/60 mb-1.5">Carrera seleccionada</p>
+                    <p className="font-black text-[#1B3070] text-lg leading-tight mb-2">{selectedCareer.name}</p>
+                    <div className="flex gap-4 text-base text-gray-500 flex-wrap">
                       {selectedCareer.monthly_price && (
                         <span><span className="font-semibold text-gray-700">Colegiatura:</span> {selectedCareer.monthly_price}</span>
                       )}
@@ -198,7 +198,7 @@ export default function MiBeca() {
             )}
 
             {/* ── Scholarship levels ─────────────────────────────────────── */}
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400 mb-3">
+            <p className="text-base font-black uppercase tracking-[0.18em] text-gray-400 mb-3">
               Tu promedio → Tu beca
             </p>
             <div className="space-y-2.5 mb-6">
@@ -219,14 +219,14 @@ export default function MiBeca() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span
-                            className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
+                            className="text-sm font-black uppercase tracking-wider px-3 py-1 rounded-full"
                             style={{ background: level.color + '18', color: level.color }}
                           >
                             {level.label}
                           </span>
-                          <span className="text-[10px] text-gray-400 font-medium">{level.range}</span>
+                          <span className="text-sm text-gray-400 font-medium">{level.range}</span>
                         </div>
-                        <p className="text-sm font-semibold text-gray-800 leading-snug">{level.beca}</p>
+                        <p className="text-base font-semibold text-gray-800 leading-snug">{level.beca}</p>
                       </div>
                       <div
                         className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all"
@@ -251,11 +251,11 @@ export default function MiBeca() {
             <div className="flex gap-3 mb-6">
               <div className="flex-1 flex items-center gap-2 p-3 rounded-xl bg-amber-50 border border-amber-100">
                 <span className="text-amber-500 text-base">⏳</span>
-                <p className="text-[11px] font-semibold text-amber-700 leading-snug">Beneficios válidos hasta el 31 de agosto</p>
+                <p className="text-sm font-semibold text-amber-700 leading-snug">Beneficios válidos hasta el 31 de agosto</p>
               </div>
               <div className="flex-1 flex items-center gap-2 p-3 rounded-xl bg-red-50 border border-red-100">
                 <span className="text-red-400 text-base">🔒</span>
-                <p className="text-[11px] font-semibold text-red-700 leading-snug">Cupos limitados por generación</p>
+                <p className="text-sm font-semibold text-red-700 leading-snug">Cupos limitados por generación</p>
               </div>
             </div>
 
@@ -284,42 +284,42 @@ export default function MiBeca() {
                       </svg>
                     </div>
                     <div>
-                      <p className="font-black text-gray-900 text-sm leading-tight">Perfecto. Ya tienes un nivel de beca asignado</p>
-                      <p className="text-[11px] mt-0.5 font-medium" style={{ color: level.color }}>{level.label} · {level.beca}</p>
+                      <p className="font-black text-gray-900 text-base leading-tight">Perfecto. Ya tienes un nivel de beca asignado</p>
+                      <p className="text-sm mt-0.5 font-medium" style={{ color: level.color }}>{level.label} · {level.beca}</p>
                     </div>
                   </div>
 
                   {/* Real price breakdown (only when career is selected) */}
                   {hasCareer && tuitionBase > 0 && (
                     <div className="mb-4 space-y-2 bg-white/70 rounded-xl p-3 border border-gray-100">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2">Tu costo con beca</p>
+                      <p className="text-sm font-black uppercase tracking-wider text-gray-400 mb-2">Tu costo con beca</p>
 
                       {tuitionDiscount > 0 ? (
                         <div className="flex justify-between items-center">
                           <div>
-                            <p className="text-xs text-gray-600">Colegiatura mensual</p>
-                            <p className="text-[10px] text-gray-400">Base: <span className="line-through">{fmt(tuitionBase)}</span></p>
+                            <p className="text-sm text-gray-600">Colegiatura mensual</p>
+                            <p className="text-sm text-gray-400">Base: <span className="line-through">{fmt(tuitionBase)}</span></p>
                           </div>
-                          <span className="font-black text-base" style={{ color: level.color }}>{fmt(tuitionFinal)}</span>
+                          <span className="font-black text-lg" style={{ color: level.color }}>{fmt(tuitionFinal)}</span>
                         </div>
                       ) : (
                         <div className="flex justify-between items-center">
-                          <p className="text-xs text-gray-600">Colegiatura mensual</p>
-                          <span className="font-black text-base text-gray-800">{fmt(tuitionBase)}</span>
+                          <p className="text-sm text-gray-600">Colegiatura mensual</p>
+                          <span className="font-black text-lg text-gray-800">{fmt(tuitionBase)}</span>
                         </div>
                       )}
 
                       {enrollmentBase > 0 && (
                         <div className="flex justify-between items-center border-t border-gray-100 pt-2">
                           <div>
-                            <p className="text-xs text-gray-600">Inscripción</p>
-                            <p className="text-[10px] text-gray-400">Base: <span className="line-through">{fmt(enrollmentBase)}</span></p>
+                            <p className="text-sm text-gray-600">Inscripción</p>
+                            <p className="text-sm text-gray-400">Base: <span className="line-through">{fmt(enrollmentBase)}</span></p>
                           </div>
-                          <span className="font-black text-base" style={{ color: level.color }}>{fmt(enrollmentFinal)}</span>
+                          <span className="font-black text-lg" style={{ color: level.color }}>{fmt(enrollmentFinal)}</span>
                         </div>
                       )}
 
-                      <p className="text-[10px] text-gray-400 pt-1 border-t border-gray-100">
+                      <p className="text-sm text-gray-400 pt-1 border-t border-gray-100">
                         Los costos exactos se confirman con tu asesor
                       </p>
                     </div>
@@ -330,14 +330,14 @@ export default function MiBeca() {
                     <div className="flex gap-2 mb-3">
                       <Link
                         to="/carreras"
-                        className="flex-1 text-center py-2.5 rounded-xl border-2 text-xs font-black active:scale-95 transition-transform bg-white"
+                        className="flex-1 text-center py-3 rounded-xl border-2 text-sm font-black active:scale-95 transition-transform bg-white"
                         style={{ borderColor: level.color, color: level.color }}
                       >
                         Explorar carreras
                       </Link>
                       <button
                         onClick={openTest}
-                        className="flex-1 text-center py-2.5 rounded-xl text-xs font-black text-white active:scale-95 transition-transform"
+                        className="flex-1 text-center py-3 rounded-xl text-sm font-black text-white active:scale-95 transition-transform"
                         style={{ background: level.color }}
                       >
                         Test vocacional IA
@@ -347,7 +347,7 @@ export default function MiBeca() {
 
                   <button
                     onClick={() => setStep('form')}
-                    className="w-full py-3 rounded-xl text-sm font-black text-white active:scale-95 transition-transform"
+                    className="w-full py-3.5 rounded-xl text-base font-black text-white active:scale-95 transition-transform"
                     style={{ background: level.color }}
                   >
                     Activar mi beca con un asesor
@@ -358,14 +358,14 @@ export default function MiBeca() {
 
             {/* Next start */}
             <div className="mb-6 p-3.5 rounded-xl bg-[#1B3070]/5 border border-[#1B3070]/10">
-              <p className="text-xs text-gray-500 mb-0.5">Próxima fecha de inicio</p>
-              <p className="text-sm font-black text-[#1B3070]">1 de septiembre de 2026</p>
-              <p className="text-xs text-gray-400 mt-0.5">Sin examen de admisión · Proceso en 5 pasos</p>
+              <p className="text-sm text-gray-500 mb-0.5">Próxima fecha de inicio</p>
+              <p className="text-base font-black text-[#1B3070]">1 de septiembre de 2026</p>
+              <p className="text-sm text-gray-400 mt-0.5">Sin examen de admisión · Proceso en 5 pasos</p>
             </div>
 
             <button
               onClick={() => setStep('form')}
-              className="w-full bg-[#1B3070] text-white font-bold py-3.5 rounded-2xl text-sm active:scale-95 transition-transform"
+              className="w-full bg-[#1B3070] text-white font-bold py-4 rounded-2xl text-base active:scale-95 transition-transform"
             >
               Solicitar mi beca ahora
             </button>
@@ -375,14 +375,14 @@ export default function MiBeca() {
         {step === 'form' && (
           <>
             <div className="pt-6 pb-4">
-              <h2 className="font-black text-[#1B3070] text-xl">Cuéntanos de ti</h2>
-              <p className="text-gray-500 text-sm mt-1">Completa el formulario y te contactaremos.</p>
+              <h2 className="font-black text-[#1B3070] text-2xl">Cuéntanos de ti</h2>
+              <p className="text-gray-500 text-base mt-1">Completa el formulario y te contactaremos.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1 block">Nombre *</label>
+                  <label className="text-sm font-semibold text-gray-600 mb-1 block">Nombre *</label>
                   <input
                     required
                     value={form.firstName}
@@ -392,7 +392,7 @@ export default function MiBeca() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1 block">Apellido *</label>
+                  <label className="text-sm font-semibold text-gray-600 mb-1 block">Apellido *</label>
                   <input
                     required
                     value={form.lastName}
@@ -404,7 +404,7 @@ export default function MiBeca() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1 block">Correo electrónico *</label>
+                <label className="text-sm font-semibold text-gray-600 mb-1 block">Correo electrónico *</label>
                 <input
                   required
                   type="email"
@@ -416,7 +416,7 @@ export default function MiBeca() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1 block">Teléfono</label>
+                <label className="text-sm font-semibold text-gray-600 mb-1 block">Teléfono</label>
                 <input
                   type="tel"
                   value={form.phone}
@@ -427,12 +427,12 @@ export default function MiBeca() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1 block">Carrera de interés</label>
+                <label className="text-sm font-semibold text-gray-600 mb-1 block">Carrera de interés</label>
                 {selectedCareer && !careerOverride ? (
                   <div className="flex items-center justify-between border border-[#1B3070]/30 bg-[#1B3070]/5 rounded-xl px-3 py-2.5">
                     <div>
-                      <p className="text-[10px] text-[#1B3070]/60 font-medium mb-0.5">Carrera seleccionada</p>
-                      <p className="text-sm font-semibold text-[#1B3070] leading-tight">{selectedCareer.name}</p>
+                      <p className="text-xs text-[#1B3070]/60 font-medium mb-0.5">Carrera seleccionada</p>
+                      <p className="text-base font-semibold text-[#1B3070] leading-tight">{selectedCareer.name}</p>
                     </div>
                     <button
                       type="button"
@@ -440,7 +440,7 @@ export default function MiBeca() {
                         setCareerOverride(true)
                         setForm(f => ({ ...f, career: '' }))
                       }}
-                      className="text-[11px] text-gray-400 underline underline-offset-2 ml-3 flex-shrink-0"
+                      className="text-sm text-gray-400 underline underline-offset-2 ml-3 flex-shrink-0"
                     >
                       Cambiar
                     </button>
@@ -462,7 +462,7 @@ export default function MiBeca() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#1B3070] disabled:bg-gray-300 text-white font-bold py-3.5 rounded-2xl text-sm mt-2"
+                className="w-full bg-[#1B3070] disabled:bg-gray-300 text-white font-bold py-4 rounded-2xl text-base mt-2"
               >
                 {loading ? 'Enviando...' : 'Solicitar beca'}
               </button>
@@ -470,7 +470,7 @@ export default function MiBeca() {
               <button
                 type="button"
                 onClick={() => setStep('info')}
-                className="w-full text-gray-400 text-sm py-2"
+                className="w-full text-gray-400 text-base py-2"
               >
                 Volver
               </button>
@@ -486,17 +486,17 @@ export default function MiBeca() {
               </svg>
             </div>
             <h2 className="font-black text-[#1B3070] text-2xl mb-2">¡Solicitud enviada!</h2>
-            <p className="text-gray-500 text-sm max-w-xs leading-relaxed">
+            <p className="text-gray-500 text-base max-w-sm leading-relaxed">
               Hemos recibido tu solicitud. Un asesor de admisiones te contactará en las próximas horas para guiarte en el proceso — sin examen de ingreso.
             </p>
             <div className="mt-6 p-4 bg-[#1B3070]/5 rounded-2xl w-full text-left">
-              <p className="text-xs text-gray-500 mb-1">También puedes contactarnos directamente:</p>
-              <p className="text-[#1B3070] font-semibold text-sm">{values.contactPhone}</p>
-              <p className="text-[#1B3070] font-semibold text-sm">{values.contactEmail}</p>
+              <p className="text-sm text-gray-500 mb-1">También puedes contactarnos directamente:</p>
+              <p className="text-[#1B3070] font-semibold text-base">{values.contactPhone}</p>
+              <p className="text-[#1B3070] font-semibold text-base">{values.contactEmail}</p>
             </div>
             <button
               onClick={() => setStep('info')}
-              className="mt-6 text-[#1B3070] font-semibold text-sm underline"
+              className="mt-6 text-[#1B3070] font-semibold text-base underline"
             >
               Volver a becas
             </button>

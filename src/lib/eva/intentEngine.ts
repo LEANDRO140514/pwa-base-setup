@@ -7,6 +7,7 @@ import { CONFIRMATION_YES, CONFIRMATION_NO } from './normalizer'
 
 const INTENT_KEYWORDS: Partial<Record<Intent, string[]>> = {
   scholarship:  ['beca', 'becas', 'descuento', 'apoyo economico', 'financiamiento', 'precio especial'],
+  payment:      ['pagos', 'pago', 'mensualidades', 'meses sin intereses', 'forma de pago', 'pago anual', 'tarjeta', 'credito', 'meses', 'intereses', 'plazos'],
   documents:    ['documento', 'documentos', 'requisito', 'requisitos', 'papeles', 'certificado', 'curp', 'acta'],
   admission:    ['inscripcion', 'inscribirme', 'admision', 'ingreso', 'como me inscribo', 'como entro'],
   schedule:     ['horario', 'horarios', 'dias de clase', 'cuando son las clases', 'turno'],

@@ -68,7 +68,7 @@ export default function NavBar() {
                 <>
                   {label}
                   {isActive && (
-                    <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-[#E6B400]" />
+                    <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-[3px] rounded-full bg-[#E6B400] shadow-[0_0_8px_rgba(230,180,0,0.5)]" />
                   )}
                 </>
               )}

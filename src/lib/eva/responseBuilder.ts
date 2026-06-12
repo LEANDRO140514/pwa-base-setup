@@ -207,6 +207,12 @@ export function buildResponse(
       }
     }
 
+    case 'payment':
+      return {
+        text: 'Universidad Latino ofrece opciones de pago en mensualidades o pago anual con descuento. No tengo información específica sobre meses sin intereses con tarjeta. ¿Te gustaría que un asesor te ayude a revisar las opciones de pago disponibles?',
+        source: 'faq', pendingAction: null, confidence: 1,
+      }
+
     case 'documents': {
       const faq = findFAQByTriggers(faqs, 'documentos', 'requisitos', 'papeles')
       return {

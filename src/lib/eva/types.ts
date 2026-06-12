@@ -7,6 +7,7 @@ export type Intent =
   | 'career_detail'
   | 'modality_filter'
   | 'scholarship'
+  | 'payment'
   | 'admission'
   | 'documents'
   | 'schedule'
