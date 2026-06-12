@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/img-server/8001/(.*)", "destination": "http://154.38.173.239:8001/$1" },
+    { "source": "/img-server/8002/(.*)", "destination": "http://154.38.173.239:8002/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "buildCommand": "npm run build",

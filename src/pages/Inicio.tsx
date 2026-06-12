@@ -40,38 +40,38 @@ function FadeUp({ children, delay = 0, className = '' }: {
 // ─── Area + benefit content ───────────────────────────────────────────────────
 
 const AREA_META: Record<string, { img: string }> = {
-  'Derecho':     { img: 'http://154.38.173.239:8002/dis-derecho.webp' },
-  'Salud':       { img: 'http://154.38.173.239:8002/dis-salud.webp' },
-  'Negocios':    { img: 'http://154.38.173.239:8002/dis-negocios.webp' },
-  'Gastronomía': { img: 'http://154.38.173.239:8002/dis-gastronomia.webp' },
-  'Tecnología':  { img: 'http://154.38.173.239:8002/dis-tecnologia.webp' },
+  'Derecho':     { img: '/img-server/8002/dis-derecho.webp' },
+  'Salud':       { img: '/img-server/8002/dis-salud.webp' },
+  'Negocios':    { img: '/img-server/8002/dis-negocios.webp' },
+  'Gastronomía': { img: '/img-server/8002/dis-gastronomia.webp' },
+  'Tecnología':  { img: '/img-server/8002/dis-tecnologia.webp' },
 }
 
 // ─── Career-specific images (one per career, different from area images) ──────
 
 const CAREER_IMG: Record<string, string> = {
-  'Licenciatura en Derecho':                      'http://154.38.173.239:8001/01_derecho.webp',
-  'Licenciatura en Derecho (Online)':             'http://154.38.173.239:8001/02_derecho_online.webp',
-  'Licenciatura en Psicología':                   'http://154.38.173.239:8001/03_psicologia.webp',
-  'Licenciatura en Enfermería':                   'http://154.38.173.239:8001/04_enfermeria.webp',
-  'Licenciatura en Nutrición':                    'http://154.38.173.239:8001/05_nutricion.webp',
-  'Lic. en Negocios Internacionales':             'http://154.38.173.239:8001/06_negocios_internacionales.webp',
-  'Lic. en Ventas y Mercadotecnia':               'http://154.38.173.239:8001/07_ventas_mercadotecnia.webp',
-  'Lic. en Ventas y Mercadotecnia (Online)':      'http://154.38.173.239:8001/08_ventas_mercadotecnia_online.webp',
-  'Licenciatura en Gastronomía':                  'http://154.38.173.239:8001/12_gastronomia.webp',
-  'Ingeniería en Sistemas Computacionales':        'http://154.38.173.239:8001/11_ingenieria_sistemas.webp',
-  'Licenciatura en Administración (Sabatina)':     'http://154.38.173.239:8001/09_administracion_sabatina.webp',
-  'Lic. en Administración y Desarrollo Empresarial (Online)': 'http://154.38.173.239:8001/10_administracion_online.webp',
+  'Licenciatura en Derecho':                      '/img-server/8001/01_derecho.webp',
+  'Licenciatura en Derecho (Online)':             '/img-server/8001/02_derecho_online.webp',
+  'Licenciatura en Psicología':                   '/img-server/8001/03_psicologia.webp',
+  'Licenciatura en Enfermería':                   '/img-server/8001/04_enfermeria.webp',
+  'Licenciatura en Nutrición':                    '/img-server/8001/05_nutricion.webp',
+  'Lic. en Negocios Internacionales':             '/img-server/8001/06_negocios_internacionales.webp',
+  'Lic. en Ventas y Mercadotecnia':               '/img-server/8001/07_ventas_mercadotecnia.webp',
+  'Lic. en Ventas y Mercadotecnia (Online)':      '/img-server/8001/08_ventas_mercadotecnia_online.webp',
+  'Licenciatura en Gastronomía':                  '/img-server/8001/12_gastronomia.webp',
+  'Ingeniería en Sistemas Computacionales':        '/img-server/8001/11_ingenieria_sistemas.webp',
+  'Licenciatura en Administración (Sabatina)':     '/img-server/8001/09_administracion_sabatina.webp',
+  'Lic. en Administración y Desarrollo Empresarial (Online)': '/img-server/8001/10_administracion_online.webp',
 }
 const AREAS = ['Derecho', 'Salud', 'Negocios', 'Gastronomía', 'Tecnología']
 
 const BENEFITS = [
-  { title: 'Validez SEP',          desc: 'Títulos con RVOE reconocidos oficialmente por la Secretaría de Educación Pública.',      img: 'http://154.38.173.239:8002/validez-sep.webp' },
-  { title: 'Ubicación',            desc: 'Campus en el norte de Mérida, la zona de mayor plusvalía y crecimiento de la ciudad, cerca de todo.', img: 'http://154.38.173.239:8002/ubicacion.webp' },
-  { title: 'Empleabilidad',        desc: 'Programas diseñados junto al sector empresarial del sureste mexicano.',                   img: 'http://154.38.173.239:8002/empleabilidad.webp' },
-  { title: 'Prácticas reales',     desc: 'Laboratorios, clínicas y empresas aliadas para aprendizaje práctico desde el primer año.',img: 'http://154.38.173.239:8002/practicas-reales.webp' },
-  { title: 'Internacionalización', desc: 'Convenios con instituciones extranjeras y movilidad estudiantil internacional.',          img: 'http://154.38.173.239:8002/internacionalizacion.webp' },
-  { title: 'Tecnología educativa', desc: 'Plataformas digitales, aulas virtuales y herramientas de IA integradas al aprendizaje.',  img: 'http://154.38.173.239:8002/tecnologia-educativa.webp' },
+  { title: 'Validez SEP',          desc: 'Títulos con RVOE reconocidos oficialmente por la Secretaría de Educación Pública.',      img: '/img-server/8002/validez-sep.webp' },
+  { title: 'Ubicación',            desc: 'Campus en el norte de Mérida, la zona de mayor plusvalía y crecimiento de la ciudad, cerca de todo.', img: '/img-server/8002/ubicacion.webp' },
+  { title: 'Empleabilidad',        desc: 'Programas diseñados junto al sector empresarial del sureste mexicano.',                   img: '/img-server/8002/empleabilidad.webp' },
+  { title: 'Prácticas reales',     desc: 'Laboratorios, clínicas y empresas aliadas para aprendizaje práctico desde el primer año.',img: '/img-server/8002/practicas-reales.webp' },
+  { title: 'Internacionalización', desc: 'Convenios con instituciones extranjeras y movilidad estudiantil internacional.',          img: '/img-server/8002/internacionalizacion.webp' },
+  { title: 'Tecnología educativa', desc: 'Plataformas digitales, aulas virtuales y herramientas de IA integradas al aprendizaje.',  img: '/img-server/8002/tecnologia-educativa.webp' },
 ]
 
 const MODALITY_LABELS: Record<string, string> = {

@@ -41,7 +41,7 @@ const LEADERS = [
 ]
 
 const INFRA = [
-  { label: 'Espacios de aprendizaje práctico', sub: 'Formación aplicada profesional', img: 'http://154.38.173.239:8002/comedor-practicas.webp' },
+  { label: 'Espacios de aprendizaje práctico', sub: 'Formación aplicada profesional', img: '/img-server/8002/comedor-practicas.webp' },
   { label: 'Centro de Cómputo', sub: 'Tecnología actualizada para tu formación digital', img: '/centro-computo.jpg' },
   { label: 'Espacios Académicos', sub: 'Aulas diseñadas para el aprendizaje activo', img: '/aulas.jpg' },
   { label: 'Áreas de Convivencia', sub: 'Espacios para la vida universitaria plena', img: '/espacios-convivencia.jpg' },
@@ -49,9 +49,9 @@ const INFRA = [
 
 const COMMUNITY_IMGS = [
   '/galeria/buhos-1.jpg',
-  'http://154.38.173.239:8002/estudiantes.webp',
+  '/img-server/8002/estudiantes.webp',
   '/psi-estudiante.webp',
-  'http://154.38.173.239:8002/vista-aulas.webp',
+  '/img-server/8002/vista-aulas.webp',
 ]
 
 const BUHOS_TIMELINE = [
@@ -96,7 +96,7 @@ export default function Universidad() {
           transition={{ duration: 1.8, ease: 'easeOut' }}
         >
           <img
-            src="http://154.38.173.239:8002/entrada.webp"
+            src="/img-server/8002/entrada.webp"
             alt="Comunidad universitaria"
             className="w-full h-full object-cover object-center"
           />
@@ -183,7 +183,7 @@ export default function Universidad() {
           transition={{ duration: 1.4, ease: 'easeOut' }}
         >
           <img
-            src="http://154.38.173.239:8002/deportes.webp"
+            src="/img-server/8002/deportes.webp"
             alt="Orgullo Búhos UNILATINO"
             className="w-full h-full object-cover object-center"
           />
@@ -447,7 +447,7 @@ export default function Universidad() {
             {/* Foto 2 */}
             <FadeUp delay={0.08}>
               <div className="rounded-2xl overflow-hidden h-[140px] md:h-[190px] group">
-                <img src="http://154.38.173.239:8002/futbol-equipo.webp" alt="Búhos UNILATINO" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src="/img-server/8002/futbol-equipo.webp" alt="Búhos UNILATINO" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
             </FadeUp>
 

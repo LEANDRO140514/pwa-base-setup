@@ -88,6 +88,18 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    proxy: {
+      '/img-server/8001': {
+        target: 'http://154.38.173.239:8001',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/img-server\/8001/, '')
+      },
+      '/img-server/8002': {
+        target: 'http://154.38.173.239:8002',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/img-server\/8002/, '')
+      }
+    }
   },
   resolve: {
     alias: {
