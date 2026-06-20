@@ -14,7 +14,7 @@ const BECA_LEVELS = [
   {
     id: 'sobresaliente',
     label: 'Sobresaliente',
-    range: '9.5 o más',
+    range: '9.60 – 10.00',
     beca: 'Beca 50% colegiatura + 50% inscripción',
     color: '#059669',
     bg: '#ecfdf5',
@@ -22,7 +22,7 @@ const BECA_LEVELS = [
   {
     id: 'muy-alto',
     label: 'Muy alto',
-    range: '9.0 – 9.49',
+    range: '9.00 – 9.59',
     beca: 'Beca 40% colegiatura + 50% inscripción',
     color: '#2563eb',
     bg: '#eff6ff',

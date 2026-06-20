@@ -13,8 +13,8 @@ INSERT INTO faqs (type, triggers, response) VALUES
 ('informational', ARRAY['beca', 'becas', 'descuento', 'apoyo economico'],
 'Contamos con becas por aprovechamiento académico:
 
-• Sobresaliente (9.5+) — 50% colegiatura + 50% inscripción
-• Muy alto (9.0–9.49) — 40% colegiatura + 50% inscripción
+• Sobresaliente (9.60–10.00) — 50% colegiatura + 50% inscripción
+• Muy alto (9.00–9.59) — 40% colegiatura + 50% inscripción
 • Alto (8.5–8.99) — 30% colegiatura + 50% inscripción
 • Base (7.0–8.49) — 50% descuento en inscripción
 
@@ -57,7 +57,7 @@ Todas con el mismo título con validez SEP.'),
 ('informational', ARRAY['precio', 'costo', 'colegiatura', 'cuanto cuesta', 'mensualidad'],
 'Colegiaturas mensuales:
 
-• Presencial: $4,650/mes | Inscripción: $7,000
+• Presencial: $4,650/mes | Inscripción: $8,000
 • Sabatina: $3,960/mes | Inscripción: $3,600
 • En Línea: $1,980/mes | Inscripción: $3,600
 

@@ -14,7 +14,7 @@ export function formatPrice(price: number | string | null | undefined): string {
 }
 
 function n(text: string): string {
-  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/-/g, ' ').trim()
 }
 
 // ── Career renderers ──────────────────────────────────────────────────────────
@@ -161,7 +161,7 @@ const STATIC_FAQS: Partial<Record<Intent, { response: string; pendingAction?: st
     response: 'Sí contamos con proceso de equivalencias. El área de Control Escolar evalúa tu historial académico para determinar qué materias aplican. ¿Quieres que te pongamos en contacto?',
   },
   faq: {
-    response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $7,000\n• Sabatina: $3,960/mes | Inscripción: $3,600\n• En Línea: $1,980/mes | Inscripción: $3,600',
+    response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $8,000\n• Sabatina: $3,960/mes | Inscripción: $3,600\n• En Línea: $1,980/mes | Inscripción: $3,600',
   },
 }
 

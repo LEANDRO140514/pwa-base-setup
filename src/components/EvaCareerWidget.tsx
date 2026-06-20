@@ -44,14 +44,14 @@ function getQuickResponse(action: string, career: Career, waNumber: string): str
   const fields = JOB_FIELDS[career.area] ?? ['Sectores público y privado', 'Docencia e investigación', 'Emprendimiento']
   const dur = DURATIONS[career.area] ?? '4 años'
   const price = career.monthlyFee ?? '$4,650/mes'
-  const enroll = career.enrollment ?? '$7,000'
+  const enroll = career.enrollment ?? '$8,000'
 
   switch (action) {
     case 'campo':
       return `**Campo laboral — ${career.name}**\n\n${fields.map((f) => `• ${f}`).join('\n')}\n\n¿Quieres saber sobre becas o requisitos?`
 
     case 'becas':
-      return `**Becas para ${career.name}**\n\nColegiatura: ${price}\nInscripción: ${enroll}\n\n🏆 Sobresaliente (9.5+): 50% colegiatura + 50% inscripción\n⭐ Muy alto (9.0–9.49): 40% colegiatura + 50% inscripción\n✅ Alto (8.5–8.99): 30% colegiatura + 50% inscripción\n📌 Base (7.0–8.49): 50% descuento en inscripción\n\nLa mayoría de alumnos recibe apoyo. ¿Quieres calcular la tuya?`
+      return `**Becas para ${career.name}**\n\nColegiatura: ${price}\nInscripción: ${enroll}\n\n🏆 Sobresaliente (9.60–10.00): 50% colegiatura + 50% inscripción\n⭐ Muy alto (9.00–9.59): 40% colegiatura + 50% inscripción\n✅ Alto (8.5–8.99): 30% colegiatura + 50% inscripción\n📌 Base (7.0–8.49): 50% descuento en inscripción\n\nLa mayoría de alumnos recibe apoyo. ¿Quieres calcular la tuya?`
 
     case 'plan':
       return `**Plan de estudios — ${career.name}**\n\n• Duración: ${dur}\n• RVOE con validez SEP oficial\n• Prácticas desde el 1er semestre\n• Servicio social integrado\n• Titulación incluida\n\nPuedes ver la malla curricular completa más abajo en esta página 👇`

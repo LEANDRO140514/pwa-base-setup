@@ -62,7 +62,7 @@ Todas tienen el mismo título con validez SEP.'),
 -- Costos / precios
 ('precios,costo,colegiatura', '¿Cuánto cuesta estudiar?',
 'Colegiaturas mensuales:
-• Presencial: $4,650/mes | Inscripción: $7,000
+• Presencial: $4,650/mes | Inscripción: $8,000
 • Sabatina (Admón.): $3,960/mes | Inscripción: $3,600
 • En Línea: $1,980/mes | Inscripción: $3,600
 
