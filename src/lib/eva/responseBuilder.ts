@@ -1,8 +1,17 @@
 // ─── Eva Engine — Response builder ───────────────────────────────────────────
 
 import type { Intent, Entities, ConversationState, Career, FAQ, MatchedSource, Modality } from './types'
+import { ONLINE_SYNONYMS, PRESENTIAL_SYNONYMS, SATURDAY_SYNONYMS } from './normalizer'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
+function modalityKey(m: string): string {
+  const norm = n(m)
+  if (ONLINE_SYNONYMS.some((s) => norm.includes(s))) return 'en linea'
+  if (PRESENTIAL_SYNONYMS.some((s) => norm.includes(s))) return 'presencial'
+  if (SATURDAY_SYNONYMS.some((s) => norm.includes(s))) return 'sabatina'
+  return norm
+}
 
 export function formatPrice(price: number | string | null | undefined): string {
   if (price === null || price === undefined || price === '') return ''
@@ -13,8 +22,9 @@ export function formatPrice(price: number | string | null | undefined): string {
   return `$${num.toLocaleString('es-MX')}/mes`
 }
 
-function n(text: string): string {
-  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/-/g, ' ').trim()
+function n(text: string | null | undefined): string {
+  if (text == null) return ''
+  return String(text).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/-/g, ' ').trim()
 }
 
 // ── Career renderers ──────────────────────────────────────────────────────────
@@ -85,7 +95,7 @@ function renderCareerDetail(
 
   // Narrow by modality if we have context and multiple results
   if (effectiveModality && matched.length > 1) {
-    const filtered = matched.filter((c) => n(c.modality) === n(effectiveModality))
+    const filtered = matched.filter((c) => modalityKey(c.modality) === modalityKey(effectiveModality))
     if (filtered.length > 0) matched = filtered
   }
 
@@ -128,7 +138,7 @@ function findFAQByTriggers(faqs: FAQ[], ...keywords: string[]): FAQ | null {
 
 export const PENDING_ACTIONS: Record<string, (careers: Career[]) => string> = {
   show_saturday_schedules: (careers) => {
-    const sat = careers.filter((c) => n(c.modality) === 'sabatina')
+    const sat = careers.filter((c) => modalityKey(c.modality) === 'sabatina')
     const list = sat.length
       ? sat.map((c) => `• ${c.name} — ${formatPrice(c.monthly_price)}`).join('\n')
       : '• Administración Sabatina — $3,960/mes'
@@ -137,14 +147,14 @@ export const PENDING_ACTIONS: Record<string, (careers: Career[]) => string> = {
   show_admission_requirements: () =>
     'El proceso de inscripción tiene 5 pasos:\n\n1. Solicitar información ✓\n2. Entrevista con un asesor\n3. Entrega de documentos\n4. Pago de inscripción\n5. Inicio de clases\n\nNo se requiere examen de admisión. ¿Te gustaría agendar tu entrevista?',
   show_scholarship_detail: () =>
-    'Contamos con las siguientes becas:\n\n• Beca de Excelencia — hasta 80% (promedio 9.0+)\n• Beca Social — hasta 60% (análisis socioeconómico)\n• Beca de Continuidad — hasta 50% (alumnos actuales)\n• Plan a 12 meses sin intereses\n\nPuedes solicitarla desde la sección "Mi Beca" en la app. ¿Necesitas más información?',
+    'Contamos con becas por aprovechamiento académico:\n\n🏆 Sobresaliente (9.60–10.00): 50% colegiatura + 50% inscripción\n⭐ Muy alto (9.00–9.59): 40% colegiatura + 50% inscripción\n✅ Alto (8.5–8.99): 30% colegiatura + 50% inscripción\n📌 Base (7.0–8.49): 50% descuento en inscripción\n\nPuedes calcular tu beca desde la sección "Mi Beca" en la app. ¿Te gustaría hacerlo?',
 }
 
 // ── Static FAQ fallbacks ──────────────────────────────────────────────────────
 
 const STATIC_FAQS: Partial<Record<Intent, { response: string; pendingAction?: string }>> = {
   scholarship: {
-    response: 'Contamos con becas del 30% al 80% según promedio y situación socioeconómica, además de plan a 12 meses sin intereses.',
+    response: 'Contamos con becas por aprovechamiento académico:\n\n🏆 Sobresaliente (9.60–10.00): 50% colegiatura + 50% inscripción\n⭐ Muy alto (9.00–9.59): 40% colegiatura + 50% inscripción\n✅ Alto (8.5–8.99): 30% colegiatura + 50% inscripción\n📌 Base (7.0–8.49): 50% descuento en inscripción\n\n¿Te gustaría calcular tu beca desde la app?',
     pendingAction: 'show_scholarship_detail',
   },
   documents: {
@@ -239,20 +249,26 @@ export function buildResponse(
     case 'revalidation':
       return { text: STATIC_FAQS.revalidation!.response, source: 'faq', pendingAction: null, confidence: 1 }
 
+    case 'vocational':
+      return {
+        text: 'Es normal tener dudas sobre tu futuro académico 😊\n\nTe recomiendo nuestro test vocacional EVA. En menos de 2 minutos te sugiere las carreras ideales según tu perfil:\n\n👉 https://testunilatino.algorithmus.io/\n\nTambién puedo ayudarte con:\n• Información de carreras disponibles\n• Costos y becas\n• Proceso de admisión\n• Modalidades de estudio\n\n¿Sobre qué te gustaría saber más?',
+        source: 'fallback', pendingAction: null, confidence: 1,
+      }
+
     case 'faq':
       return { text: STATIC_FAQS.faq!.response, source: 'faq', pendingAction: null, confidence: 0.8 }
 
     case 'modality_filter': {
       if (effectiveModality === 'En línea') {
-        const online = careers.filter((c) => n(c.modality) === 'en linea')
+        const online = careers.filter((c) => modalityKey(c.modality) === 'en linea')
         return { text: renderOnlineCareers(online), source: 'careers', pendingAction: null, confidence: 1 }
       }
       if (effectiveModality === 'Presencial') {
-        const presential = careers.filter((c) => n(c.modality) === 'presencial')
+        const presential = careers.filter((c) => modalityKey(c.modality) === 'presencial')
         return { text: renderPresentialCareers(presential), source: 'careers', pendingAction: null, confidence: 1 }
       }
       if (effectiveModality === 'Sabatina') {
-        const sat = careers.filter((c) => n(c.modality) === 'sabatina')
+        const sat = careers.filter((c) => modalityKey(c.modality) === 'sabatina')
         return { text: renderSaturdayCareers(sat), source: 'careers', pendingAction: 'show_saturday_schedules', confidence: 1 }
       }
       return { text: renderCareersByArea(careers), source: 'careers', pendingAction: null, confidence: 0.5 }

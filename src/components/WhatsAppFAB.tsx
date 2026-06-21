@@ -2,7 +2,7 @@ import { useAdmin } from '@/context/AdminContext'
 
 export default function WhatsAppFAB() {
   const { values } = useAdmin()
-  const waNumber = (values.whatsappNumber || '+529996442662').replace(/\D/g, '')
+  const waNumber = (values.whatsappNumber || '+529994538421').replace(/\D/g, '')
   const url = `https://wa.me/${waNumber}?text=Hola%2C%20me%20interesa%20información%20sobre%20las%20carreras%20de%20Universidad%20Latino.`
 
   return (

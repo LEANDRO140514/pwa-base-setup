@@ -86,7 +86,7 @@ export default function Inicio() {
   const { values } = useAdmin()
   const navigate = useNavigate()
   const { openTest } = useTestModal()
-  const waNumber = (values.whatsappNumber || '+529996442662').replace(/\D/g, '')
+  const waNumber = (values.whatsappNumber || '+529994538421').replace(/\D/g, '')
 
   const [selectedArea, setSelectedArea] = useState<string | null>(null)
   const careersRef = useRef<HTMLDivElement>(null)
@@ -304,37 +304,52 @@ export default function Inicio() {
                 className="w-full h-full border-0" loading="lazy" />
             </div>
             <div className="lg:col-span-2 flex flex-col gap-6 pt-2">
-              {[
-                { icon: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z', label: 'Dirección', value: values.address || 'Calle 7 Tablaje 15542 x 4 y 6, Santa Rita Cholul, Mérida, Yucatán' },
-                { icon: 'M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z', label: 'Teléfono', value: values.contactPhone || '999-943-5386', href: `tel:${(values.contactPhone || '9999435386').replace(/\D/g, '')}` },
-                { icon: 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75', label: 'Correo', value: values.contactEmail || 'informes@universidadlatino.edu.mx', href: `mailto:${values.contactEmail}` },
-              ].map((item) => (
-                <div key={item.label} className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#f0f4fc] flex items-center justify-center flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1B3070" strokeWidth={1.8} className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-0.5">{item.label}</p>
-                    {item.href ? (
-                      <a href={item.href} className="text-[#1B3070] font-semibold text-sm hover:underline">{item.value}</a>
-                    ) : (
-                      <p className="text-[#1B3070] font-semibold text-sm">{item.value}</p>
-                    )}
-                  </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-[#f0f4fc] flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1B3070" strokeWidth={1.8} className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
                 </div>
-              ))}
-              <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 p-4 rounded-2xl border border-[#25D366]/30 bg-[#f0fdf4] hover:bg-[#dcfce7] transition-colors">
-                <svg viewBox="0 0 24 24" fill="#25D366" className="w-5 h-5 flex-shrink-0">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
                 <div>
-                  <p className="text-[#16a34a] font-bold text-sm">WhatsApp</p>
-                  <p className="text-gray-500 text-xs">+52 999 644 2662</p>
+                  <p className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-0.5">Dirección</p>
+                  <p className="text-[#1B3070] font-semibold text-sm">{values.address || 'Calle 7 Tablaje 15542 x 4 y 6, Santa Rita Cholul, Mérida, Yucatán'}</p>
                 </div>
-              </a>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-[#f0f4fc] flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1B3070" strokeWidth={1.8} className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-0.5">Teléfono</p>
+                  <p><a href="tel:+529999435386" className="text-[#1B3070] font-semibold text-sm hover:underline">(999) 943 5386</a></p>
+                  <p className="mt-1"><a href="tel:+529999438897" className="text-[#1B3070] font-semibold text-sm hover:underline">(999) 943 8897</a></p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-[#f0f4fc] flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1B3070" strokeWidth={1.8} className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-0.5">Horario</p>
+                  <p className="text-[#1B3070] font-semibold text-sm">Lunes a Viernes: 07:00 - 21:00</p>
+                  <p className="text-[#1B3070] font-semibold text-sm">Sábado: 08:00 - 14:00</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-[#f0f4fc] flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1B3070" strokeWidth={1.8} className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-0.5">Correo</p>
+                  <a href={`mailto:${values.contactEmail}`} className="text-[#1B3070] font-semibold text-sm hover:underline">{values.contactEmail || 'informes@universidadlatino.edu.mx'}</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -391,9 +406,12 @@ export default function Inicio() {
             </div>
             <div>
               <p className="text-white/30 text-xs font-black uppercase tracking-[0.2em] mb-4">Contacto</p>
-              <ul className="space-y-3">
+              <ul className="space-y-2">
                 <li className="text-white/50 text-sm leading-snug">{values.address || 'Calle 7 Tablaje 15542, Santa Rita Cholul, Mérida, Yuc.'}</li>
-                <li><a href={`tel:${(values.contactPhone || '9999435386').replace(/\D/g, '')}`} className="text-white/50 text-sm hover:text-white transition-colors">{values.contactPhone || '999-943-5386'}</a></li>
+                <li><a href="tel:+529999435386" className="text-white/50 text-sm hover:text-white transition-colors">(999) 943 5386</a></li>
+                <li><a href="tel:+529999438897" className="text-white/50 text-sm hover:text-white transition-colors">(999) 943 8897</a></li>
+                <li className="text-white/50 text-sm">Lunes a Viernes: 07:00 - 21:00</li>
+                <li className="text-white/50 text-sm">Sábado: 08:00 - 14:00</li>
                 <li><a href={`mailto:${values.contactEmail}`} className="text-white/50 text-sm hover:text-white transition-colors">{values.contactEmail}</a></li>
               </ul>
             </div>

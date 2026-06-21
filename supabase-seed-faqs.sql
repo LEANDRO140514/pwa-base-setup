@@ -42,7 +42,7 @@ INSERT INTO faqs (topic, question, answer) VALUES
 
 -- Becas
 ('becas,descuento,apoyo', '¿Tienen becas disponibles?',
-'Contamos con becas del 30%, 40% y 50% según tu promedio y situación socioeconómica. También ofrecemos plan a 12 meses sin intereses.
+'Contamos con becas del 30%, 40% y 50% según tu promedio y situación socioeconómica.
 
 • Beca de Excelencia — hasta 80% (promedio 9.0+)
 • Beca Social — hasta 60% (análisis socioeconómico)

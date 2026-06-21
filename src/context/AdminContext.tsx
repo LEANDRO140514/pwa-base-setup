@@ -52,7 +52,7 @@ const defaultCustomValues: CustomValues = {
   appTagline: 'Educación que transforma',
   contactEmail: 'informes@universidadlatino.edu.mx',
   contactPhone: '999-943-5386',
-  whatsappNumber: '+529996442662',
+  whatsappNumber: '+529994538421',
   address: 'Calle 7 Tablaje 15542 x 4 y 6, Santa Rita Cholul, Mérida, Yucatán',
   hero: {
     headline: 'Educación que transforma vidas',

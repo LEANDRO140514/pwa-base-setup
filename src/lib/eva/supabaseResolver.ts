@@ -3,6 +3,23 @@
 import { supabase } from '@/lib/supabase'
 import type { Career, FAQ } from './types'
 
+// ── Default careers fallback (when Supabase careers table is empty/fails) ────
+
+const DEFAULT_CAREERS: Career[] = [
+  { id: '1',  name: 'Nutrición',                              area: 'Salud',       modality: 'Presencial', monthly_price: 4650, enrollment_price: 8000, duration: '4 años + S.S.' },
+  { id: '2',  name: 'Enfermería',                             area: 'Salud',       modality: 'Presencial', monthly_price: 4650, enrollment_price: 8000, duration: '4 años + S.S.' },
+  { id: '3',  name: 'Psicología',                             area: 'Salud',       modality: 'Presencial', monthly_price: 4650, enrollment_price: 8000, duration: '4 años + S.S.' },
+  { id: '4',  name: 'Derecho',                                 area: 'Derecho',     modality: 'Presencial', monthly_price: 4650, enrollment_price: 8000, duration: '4 años' },
+  { id: '5',  name: 'Derecho Online',                          area: 'Derecho',     modality: 'en-linea',  monthly_price: 1980, enrollment_price: 3600, duration: '3 años' },
+  { id: '6',  name: 'Negocios Internacionales',                area: 'Negocios',    modality: 'Presencial', monthly_price: 4650, enrollment_price: 8000, duration: '3 años 4 meses' },
+  { id: '7',  name: 'Ventas y Mercadotecnia',                  area: 'Negocios',    modality: 'Presencial', monthly_price: 4650, enrollment_price: 8000, duration: '3 años 4 meses' },
+  { id: '8',  name: 'Ventas y Mercadotecnia Online',           area: 'Negocios',    modality: 'en-linea',  monthly_price: 1980, enrollment_price: 3600, duration: '3 años' },
+  { id: '9',  name: 'Gastronomía',                             area: 'Gastronomía', modality: 'Presencial', monthly_price: 4650, enrollment_price: 8000, duration: '4 años' },
+  { id: '10', name: 'Ingeniería en Sistemas Computacionales',  area: 'Tecnología',  modality: 'Presencial', monthly_price: 4650, enrollment_price: 8000, duration: '3 años 8 meses' },
+  { id: '11', name: 'Administración Sabatina',                 area: 'Negocios',    modality: 'Sabatina',  monthly_price: 3960, enrollment_price: 3600, duration: '3 años' },
+  { id: '12', name: 'Administración y Desarrollo Empresarial Online', area: 'Negocios', modality: 'en-linea', monthly_price: 1980, enrollment_price: 3600, duration: '3 años' },
+]
+
 function makeCache<T>() {
   let data: T[] | null = null
   let promise: Promise<T[]> | null = null
@@ -55,7 +72,12 @@ async function fetchTable<T>(
 }
 
 export async function fetchCareers(): Promise<Career[]> {
-  return fetchTable<Career>('careers', careerCache)
+  // Always use hardcoded DEFAULT_CAREERS instead of fetching from Supabase.
+  // Rationale: the modality column format in Supabase may not match what
+  // Eva's filter expects (e.g. 'online' vs 'en-linea'). The Carreras page
+  // consumes AdminContext data independently so there is no duplication.
+  careerCache.set(DEFAULT_CAREERS)
+  return DEFAULT_CAREERS
 }
 
 export async function fetchFAQs(): Promise<FAQ[]> {

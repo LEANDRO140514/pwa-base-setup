@@ -557,7 +557,13 @@ export default function Universidad() {
                 </div>
                 <div>
                   <p className="text-[9px] font-black text-[#E6B400] uppercase tracking-widest mb-2">📞 Teléfono</p>
-                  <p className="text-gray-600 text-sm">999-943-5386 ext. 201, 204, 206</p>
+                  <p className="text-gray-600 text-sm">(999) 943 5386</p>
+                  <p className="text-gray-600 text-sm">(999) 943 8897</p>
+                </div>
+                <div>
+                  <p className="text-[9px] font-black text-[#E6B400] uppercase tracking-widest mb-2">🕐 Horario</p>
+                  <p className="text-gray-600 text-sm">Lunes a Viernes: 07:00 - 21:00</p>
+                  <p className="text-gray-600 text-sm">Sábado: 08:00 - 14:00</p>
                 </div>
                 <div>
                   <p className="text-[9px] font-black text-[#E6B400] uppercase tracking-widest mb-2">✉️ Email</p>
@@ -571,17 +577,6 @@ export default function Universidad() {
                     className="w-full inline-flex items-center justify-center gap-2 bg-[#1B3070] text-white text-sm font-bold px-5 py-3.5 rounded-xl hover:bg-[#162660] hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm"
                   >
                     Abrir en Google Maps
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                      <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
-                    </svg>
-                  </a>
-                  <a
-                    href="https://maps.app.goo.gl/hfCMm2qLDH4DSY2W8"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 border-2 border-[#1B3070] text-[#1B3070] text-sm font-bold px-5 py-3 rounded-xl hover:bg-[#1B3070]/5 active:scale-95 transition-all"
-                  >
-                    Cómo llegar
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                       <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
                     </svg>

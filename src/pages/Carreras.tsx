@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import TopBar from '@/components/layout/TopBar'
 import { supabase } from '@/lib/supabase'
 import { useAdmin } from '@/context/AdminContext'
@@ -102,142 +101,83 @@ let careersCache: Career[] | null = null
 function CareerSection({
   career,
   onRef,
-  scrollContainerRef,
 }: {
   career: Career
   onRef: (el: HTMLElement | null) => void
-  scrollContainerRef: React.RefObject<HTMLDivElement>
 }) {
   const ref = useRef<HTMLElement>(null)
-  const isInView = useInView(ref, { once: false, amount: 0.2 })
+  const [isVisible, setIsVisible] = useState(false)
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    container: scrollContainerRef,
-    offset: ['start end', 'end start'],
-  })
-  const bgY = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
-
-  // Register section ref with parent for dots + scroll-to
+  // Native IntersectionObserver — no framer-motion overhead
   useEffect(() => {
-    onRef(ref.current)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    const el = ref.current
+    if (!el) return
+    onRef(el)
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          obs.unobserve(el)
+        }
+      },
+      { threshold: 0.2 },
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [onRef])
 
   const bgImg = career.image || CAREER_IMG[career.name] || AREA_IMG[career.area] || CAREER_IMG['Nutrición']
 
-  const contentVariants = {
-    hidden: { opacity: 0, y: 28 },
-    visible: (delay: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const, delay },
-    }),
-  }
+  const fadeStyle = (delay: number): React.CSSProperties => ({
+    opacity: isVisible ? 1 : 0,
+    transform: isVisible ? 'translateY(0)' : 'translateY(28px)',
+    transition: `opacity 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
+  })
 
   return (
-    // motion.section broadcasts "hover" variant to children without animate prop
-    <motion.section
-      ref={ref as React.RefObject<HTMLElement>}
-      initial="rest"
-      whileHover="hover"
-      style={{ position: 'relative', overflow: 'hidden' }}
-      className="min-h-[150px] sm:min-h-[175px] md:h-[22vh] lg:h-[24vh]"
+    <section
+      ref={ref}
+      className="group relative overflow-hidden min-h-[150px] sm:min-h-[175px] md:h-[22vh] lg:h-[24vh]"
     >
-      {/* Parallax background — zoom on hover via variant propagation */}
-      <motion.div
-        variants={{
-          rest: { scale: 1,     transition: { duration: 0.6, ease: 'easeInOut' } },
-          hover: { scale: 1.025, transition: { duration: 0.5, ease: 'easeOut'  } },
-        }}
-        style={{
-          position: 'absolute',
-          top: '-10%',
-          left: 0,
-          right: 0,
-          bottom: '-10%',
-          y: bgY,
-        }}
-      >
-        <img
-          src={bgImg}
-          alt={career.name}
-          loading="lazy"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center left',
-          }}
-        />
-      </motion.div>
-
-      {/* Base gradient overlay */}
+      {/* Background — CSS backgroundImage + hover scale */}
       <div
+        className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.025]"
         style={{
-          position: 'absolute',
-          inset: 0,
+          backgroundImage: `url(${bgImg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center left',
+        }}
+      />
+
+      {/* Gradient overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
           background:
             'linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.54) 60%, rgba(0,0,0,0.20) 100%)',
         }}
       />
 
-      {/* Extra overlay that darkens on hover */}
-      <motion.div
-        variants={{
-          rest: { opacity: 0, transition: { duration: 0.3 } },
-          hover: { opacity: 1, transition: { duration: 0.25 } },
-        }}
-        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.14)' }}
-      />
+      {/* Hover darken — pure CSS */}
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/14 transition-colors duration-300" />
 
-      {/* Content */}
-      <div
-        className="relative z-10 flex flex-col justify-center px-5 md:px-10 lg:px-14 py-4 md:py-5 max-w-3xl min-h-[150px] sm:min-h-[175px] md:min-h-[22vh] lg:min-h-[24vh]"
-      >
-        {/* Area label */}
-        <motion.p
-          custom={0.04}
-          variants={contentVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="text-[#E6B400] text-[9px] font-black uppercase tracking-[0.3em] mb-1 md:mb-1.5 text-center md:text-left"
-        >
+      {/* Content — CSS transitions instead of framer-motion variants */}
+      <div className="relative z-10 flex flex-col justify-center px-5 md:px-10 lg:px-14 py-4 md:py-5 max-w-3xl min-h-[150px] sm:min-h-[175px] md:min-h-[22vh] lg:min-h-[24vh]">
+        <p style={fadeStyle(0.04)} className="text-[#E6B400] text-[9px] font-black uppercase tracking-[0.3em] mb-1 md:mb-1.5 text-center md:text-left">
           {career.area}
-        </motion.p>
+        </p>
 
-        {/* Career name — scaled from hero to catalog */}
-        <motion.h2
-          custom={0.11}
-          variants={contentVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="text-white font-bold text-base md:text-xl leading-tight tracking-tight mb-1.5 md:mb-2 text-center md:text-left"
-        >
+        <h2 style={fadeStyle(0.11)} className="text-white font-bold text-base md:text-xl leading-tight tracking-tight mb-1.5 md:mb-2 text-center md:text-left">
           {career.name}
-        </motion.h2>
+        </h2>
 
-        {/* Description */}
         {career.description && (
-          <motion.p
-            custom={0.18}
-            variants={contentVariants}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            className="text-gray-300 text-[11px] md:text-xs leading-snug mb-2 max-w-md line-clamp-2 text-center md:text-left"
-          >
+          <p style={fadeStyle(0.18)} className="text-gray-300 text-[11px] md:text-xs leading-snug mb-2 max-w-md line-clamp-2 text-center md:text-left">
             {career.description}
-          </motion.p>
+          </p>
         )}
 
-        {/* Chips: modalidad, duración, precio */}
-        <motion.div
-          custom={0.24}
-          variants={contentVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="flex flex-wrap gap-1 mb-3 justify-center md:justify-start"
-        >
+        <div style={fadeStyle(0.24)} className="flex flex-wrap gap-1 mb-3 justify-center md:justify-start">
           {career.modality && (
             <span
               className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${
@@ -257,52 +197,21 @@ function CareerSection({
               {career.monthly_price}
             </span>
           )}
-        </motion.div>
+        </div>
 
-        {/* CTA — full-width on mobile, auto on desktop */}
-        <motion.div
-          custom={0.31}
-          variants={contentVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="flex justify-center"
-        >
+        <div style={fadeStyle(0.31)} className="flex justify-center">
           <Link
             to={`/carrera/${career.id}`}
             className="inline-flex items-center justify-center gap-1 bg-[#E6B400] text-[#1B3070] font-semibold text-xs tracking-wide px-4 py-2 rounded-full shadow-[0_4px_16px_rgba(230,180,0,0.30)] hover:scale-[1.03] active:scale-95 transition-transform duration-200"
           >
             Ver carrera
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-3 h-3 shrink-0"
-            >
-              <path
-                fillRule="evenodd"
-                d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
-                clipRule="evenodd"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 shrink-0">
+              <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
             </svg>
           </Link>
-        </motion.div>
+        </div>
       </div>
-    </motion.section>
-  )
-}
-
-// ─── Loading skeleton ─────────────────────────────────────────────────────────
-
-function SnapSkeleton() {
-  return (
-    <div
-      className="flex flex-col items-center justify-center bg-[#06090f] min-h-[150px] md:h-[22vh]"
-    >
-      <div className="w-7 h-7 rounded-full border-2 border-[#E6B400] border-t-transparent animate-spin mb-3" />
-      <p className="text-white/40 text-[10px] font-medium tracking-widest uppercase">
-        Cargando catálogo
-      </p>
-    </div>
+    </section>
   )
 }
 
@@ -311,36 +220,37 @@ function SnapSkeleton() {
 export default function Carreras() {
   const navigate = useNavigate()
   const { values } = useAdmin()
-  const [careers, setCareers] = useState<Career[]>(careersCache ?? [])
-  const [loading, setLoading] = useState(careersCache === null)
+  // Render immediately from AdminContext — no Supabase wait
+  const [careers, setCareers] = useState<Career[]>(() => {
+    if (careersCache !== null) return careersCache
+    return values.careers
+      .filter((c) => c.active)
+      .map((c) => ({
+        id: c.id,
+        name: c.name,
+        area: c.area,
+        modality: c.modality,
+        monthly_price: formatPrice(c.monthlyFee),
+        description: c.description ?? '',
+        duration: c.duration,
+        enrollment: formatPrice(c.enrollment, '') || undefined,
+        highlights: c.highlights,
+      }))
+  })
   const [activeIndex, setActiveIndex] = useState(0)
   const sectionRefs = useRef<(HTMLElement | null)[]>([])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
+  // Background Supabase fetch — enriches with images/extra data, caches for next visit
   useEffect(() => {
     if (careersCache !== null) return
 
     const fetchCareers = async () => {
       const { data, error } = await supabase.from('careers').select('*')
 
-      let result: Career[]
-      if (error || !data || data.length === 0) {
-        result = values.careers
-          .filter((c) => c.active)
-          .map((c) => ({
-            id: c.id,
-            name: c.name,
-            area: c.area,
-            modality: c.modality,
-            monthly_price: formatPrice(c.monthlyFee),
-            description: c.description ?? '',
-            duration: c.duration,
-            enrollment: formatPrice(c.enrollment, '') || undefined,
-            highlights: c.highlights,
-          }))
-      } else {
+      if (!error && data && data.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        result = data.map((d: any) => ({
+        const result = data.map((d: any) => ({
           id: d.id,
           name: d.name ?? '',
           area: d.area ?? '',
@@ -352,11 +262,11 @@ export default function Carreras() {
           highlights: Array.isArray(d.highlights) ? d.highlights : undefined,
           image: d.image ?? undefined,
         }))
+        careersCache = result
+        setCareers(result)
+      } else {
+        careersCache = careers
       }
-
-      careersCache = result
-      setCareers(result)
-      setLoading(false)
     }
 
     fetchCareers()
@@ -426,12 +336,9 @@ export default function Carreras() {
       {/* Continuous scroll container — no snap, catalog feel */}
       <div
         ref={scrollContainerRef}
-        className="h-full"
-        style={{ overflowY: loading ? 'hidden' : 'scroll' }}
+        className="h-full overflow-y-scroll"
       >
-        {loading ? (
-          <SnapSkeleton />
-        ) : careers.length === 0 ? (
+        {careers.length === 0 ? (
           <div className="flex items-center justify-center bg-[#06090f] min-h-[150px] md:h-[22vh]">
             <p className="text-white/50 text-sm">No hay carreras disponibles</p>
           </div>
@@ -444,7 +351,6 @@ export default function Carreras() {
                 key={career.id}
                 career={career}
                 onRef={registerRef(index)}
-                scrollContainerRef={scrollContainerRef}
               />
             ))}
           </>
@@ -452,7 +358,7 @@ export default function Carreras() {
       </div>
 
       {/* Lateral dots navigation — fixed, outside scroll container */}
-      {!loading && careers.length > 1 && (
+      {careers.length > 1 && (
         <nav
           className="fixed right-4 md:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-50"
           aria-label="Navegación de carreras"

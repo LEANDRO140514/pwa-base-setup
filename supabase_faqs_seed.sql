@@ -18,7 +18,7 @@ INSERT INTO faqs (type, triggers, response) VALUES
 • Alto (8.5–8.99) — 30% colegiatura + 50% inscripción
 • Base (7.0–8.49) — 50% descuento en inscripción
 
-También tenemos plan de pagos a 12 meses sin intereses. ¿Te gustaría calcular tu beca desde la app?'),
+¿Te gustaría calcular tu beca desde la app?'),
 
 ('informational', ARRAY['documentos', 'requisitos', 'papeles', 'necesito'],
 'Documentos requeridos para inscripción:

@@ -86,7 +86,7 @@ export default function EvaIA() {
       setEvaState(result.state)
 
       // Append advisor CTA for high-intent messages
-      const waNumber = (values.whatsappNumber || '+529996442662').replace(/\D/g, '')
+      const waNumber = (values.whatsappNumber || '+529994538421').replace(/\D/g, '')
       const HIGH_INTENT_INTENTS = ['career_detail', 'admission', 'scholarship']
       const needsCTA = HIGH_INTENT_INTENTS.includes(result.intent) && (
         userMsg.content.toLowerCase().includes('me interesa') ||
@@ -189,11 +189,18 @@ export default function EvaIA() {
                   : 'bg-white text-gray-900 rounded-tl-sm border border-gray-100 leading-[1.7]'
               }`}
             >
-              {msg.content.split('\n').map((line, i) => (
-                <p key={i} className={i > 0 ? 'mt-2' : ''}>
-                  {line.replace(/\*\*(.*?)\*\*/g, '$1')}
-                </p>
-              ))}
+              {msg.content.split('\n').map((line, i) => {
+                const parts = line.split(/(https?:\/\/[^\s]+)/g)
+                return (
+                  <p key={i} className={i > 0 ? 'mt-2' : ''}>
+                    {parts.map((part, j) =>
+                      /^https?:\/\//.test(part)
+                        ? <a key={j} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">{part}</a>
+                        : part.replace(/\*\*(.*?)\*\*/g, '$1')
+                    )}
+                  </p>
+                )
+              })}
             </div>
           </div>
         ))}

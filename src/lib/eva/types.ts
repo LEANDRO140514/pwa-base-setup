@@ -12,6 +12,7 @@ export type Intent =
   | 'documents'
   | 'schedule'
   | 'revalidation'
+  | 'vocational'
   | 'confirmation_yes'
   | 'confirmation_no'
   | 'fallback'

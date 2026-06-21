@@ -59,7 +59,15 @@ export function detectIntent(
   // 6. General career listing
   if (CAREER_LIST_KEYWORDS.some((k) => n.includes(k))) return 'career_list'
 
-  // 7. Greeting — ONLY for short/generic messages without career context
+  // 7. Vocational / career choice doubt
+  const VOCATIONAL_KEYWORDS = [
+    'que estudiar', 'que carrera', 'no se que', 'no se cual', 'orientacion',
+    'vocacional', 'indeciso', 'no encuentro', 'cual me recomiendas', 'que me sugieres',
+    'duda', 'dudas', 'tengo duda', 'no se que hacer',
+  ]
+  if (VOCATIONAL_KEYWORDS.some((k) => n.includes(k))) return 'vocational'
+
+  // 8. Greeting — ONLY for short/generic messages without career context
   const isShort = n.split(' ').length <= 4
   const hasCareerContext = CAREER_CONTEXT_WORDS.some((w) => n.includes(w))
   if (isShort && !hasCareerContext && INTENT_KEYWORDS.greeting?.some((k) => n.includes(k))) return 'greeting'

@@ -300,12 +300,18 @@ export default function CarreraDetalle() {
   const navigate = useNavigate()
   const { values } = useAdmin()
   const [openSems, setOpenSems] = useState<Set<number>>(new Set([0]))
-  const [career, setCareer] = useState<Career | null | undefined>(undefined)
+  const [career, setCareer] = useState<Career | null | undefined>(() => {
+    // Render immediately from AdminContext instead of showing a loading spinner
+    const found = values.careers.find((c) => c.id === id)
+    return found ?? undefined
+  })
 
   useEffect(() => { window.scrollTo(0, 0) }, [id])
 
+  // Background enrichment from Supabase (non-blocking)
   useEffect(() => {
     if (!id) { setCareer(null); return }
+    const fromContext = values.careers.find((c) => c.id === id)
     const load = async () => {
       try {
         const { data } = await supabase.from('careers').select('*').eq('id', id).single()
@@ -322,13 +328,15 @@ export default function CarreraDetalle() {
             highlights: data.highlights ?? undefined,
             active: true,
           })
-        } else {
-          setCareer(values.careers.find((c) => c.id === id) ?? null)
+        } else if (!fromContext) {
+          setCareer(null)
         }
       } catch {
-        setCareer(values.careers.find((c) => c.id === id) ?? null)
+        if (!fromContext) setCareer(null)
       }
     }
+    // Set from context immediately so UI renders without waiting for Supabase
+    if (fromContext) setCareer(fromContext)
     load()
   }, [id])
 
@@ -382,7 +390,7 @@ export default function CarreraDetalle() {
 
   const c = career
 
-  const waNumber = (values.whatsappNumber || '+529996442662').replace(/\D/g, '')
+  const waNumber = (values.whatsappNumber || '+529994538421').replace(/\D/g, '')
   const waMsg = `https://wa.me/${waNumber}?text=Hola%2C%20quiero%20iniciar%20mi%20proceso%20de%20admisi%C3%B3n%20en%20${encodeURIComponent(c.name)}%20en%20Universidad%20Latino.`
 
   function handleSolicitar() {
@@ -483,7 +491,7 @@ export default function CarreraDetalle() {
       <div className="sticky top-0 md:top-16 z-30 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 md:px-16 h-14 flex items-center justify-between gap-4">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/carreras')}
             className="flex items-center gap-1.5 text-[#1B3070] text-sm font-semibold hover:opacity-70 transition-opacity flex-shrink-0"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -496,12 +504,13 @@ export default function CarreraDetalle() {
               <div className="flex-shrink-0">
                 <p className="text-[#1B3070] font-black text-sm leading-tight">{priceLabel}</p>
                 <p className="text-gray-400 text-[10px] uppercase tracking-wide">Colegiatura</p>
+                <p className="text-[10px] text-[#E6B400] font-semibold">Puede reducirse con beca</p>
               </div>
             )}
             {c.enrollment && (
               <div className="flex-shrink-0">
                 <p className="text-[#1B3070] font-black text-sm leading-tight">{c.enrollment}</p>
-                <p className="text-[10px] text-[#E6B400] font-semibold">Puede reducirse con beca</p>
+                <p className="text-gray-400 text-[10px] uppercase tracking-wide">Inscripción</p>
               </div>
             )}
             {c.duration && (
@@ -705,10 +714,10 @@ export default function CarreraDetalle() {
               </div>
               <div className="space-y-3">
                 {[
-                  { label: 'Sobresaliente', range: '9.5+',       beca: '50% colegiatura + 50% inscripción', color: '#059669' },
-                  { label: 'Muy alto',      range: '9.0 – 9.49', beca: '40% colegiatura + 50% inscripción', color: '#2563eb' },
+                  { label: 'Sobresaliente', range: '9.60 – 10.00', beca: '50% colegiatura + 50% inscripción', color: '#059669' },
+                  { label: 'Muy alto',      range: '9.00 – 9.59', beca: '40% colegiatura + 50% inscripción', color: '#2563eb' },
                   { label: 'Alto',          range: '8.5 – 8.99', beca: '30% colegiatura + 50% inscripción', color: '#7c3aed' },
-                  { label: 'Base',          range: '7.0 – 8.49', beca: '50% descuento en inscripción',       color: '#d97706' },
+                  { label: 'Base',          range: '7.0 – 8.49',   beca: '50% descuento en inscripción',      color: '#d97706' },
                 ].map((level) => (
                   <div key={level.label} className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3">
                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: level.color }} />
