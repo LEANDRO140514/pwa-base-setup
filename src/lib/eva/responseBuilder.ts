@@ -173,6 +173,15 @@ const STATIC_FAQS: Partial<Record<Intent, { response: string; pendingAction?: st
   duration: {
     response: 'La duración varía según la carrera:\n\n• Presencial: 3 a 4 años (según la carrera)\n• Sabatina: 3 años\n• En Línea: 3 años\n\nTodas incluyen prácticas profesionales y servicio social integrados en el plan de estudios.\n\n¿Te gustaría conocer las carreras disponibles en alguna modalidad?',
   },
+  contact: {
+    response: 'Estamos en:\n\n📍 Calle 7 Tablaje 15542 x 4 y 6, Santa Rita Cholul, Mérida, Yucatán\n📞 (999) 943 5386 / (999) 943 8897\n📧 informes@universidadlatino.edu.mx\n\nHorario de atención:\n• Lunes a Viernes: 07:00 – 21:00\n• Sábado: 08:00 – 14:00\n\n¿Te gustaría más información sobre carreras o iniciar tu proceso?',
+  },
+  titulation: {
+    response: 'Todas nuestras carreras cuentan con Reconocimiento de Validez Oficial (RVOE) ante la SEP. Al egresar recibes:\n\n• Título profesional con validez nacional\n• Cédula profesional (para ejercer legalmente)\n• Certificado de estudios\n\nLos trámites de titulación se gestionan directamente en la institución. ¿Te gustaría conocer el proceso de admisión?',
+  },
+  exchange: {
+    response: 'Contamos con convenios de colaboración e intercambio con instituciones nacionales e internacionales. Algunas de nuestras oportunidades incluyen:\n\n• Movilidad estudiantil internacional\n• Convenios con universidades extranjeras\n• Prácticas profesionales en el extranjero\n• Programas de internacionalización curricular\n\n¿Te gustaría conocer más sobre alguna carrera en particular?',
+  },
   faq: {
     response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $8,000\n• Sabatina: $3,960/mes | Inscripción: $3,600\n• En Línea: $1,980/mes | Inscripción: $3,600\n\nTodas las carreras incluyen prácticas profesionales y servicio social dentro del plan de estudios. Títulos con validez SEP oficial.',
   },
@@ -254,6 +263,15 @@ export function buildResponse(
 
     case 'duration':
       return { text: STATIC_FAQS.duration!.response, source: 'faq', pendingAction: null, confidence: 1 }
+
+    case 'contact':
+      return { text: STATIC_FAQS.contact!.response, source: 'faq', pendingAction: null, confidence: 1 }
+
+    case 'titulation':
+      return { text: STATIC_FAQS.titulation!.response, source: 'faq', pendingAction: null, confidence: 1 }
+
+    case 'exchange':
+      return { text: STATIC_FAQS.exchange!.response, source: 'faq', pendingAction: null, confidence: 1 }
 
     case 'vocational':
       return {

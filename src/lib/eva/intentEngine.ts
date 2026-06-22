@@ -12,7 +12,10 @@ const INTENT_KEYWORDS: Partial<Record<Intent, string[]>> = {
   admission:    ['inscripcion', 'inscribirme', 'admision', 'ingreso', 'examen', 'examen de admision', 'entrevista', 'como me inscribo', 'como entro'],
   schedule:     ['horario', 'horarios', 'modalidad', 'modalidades', 'dias de clase', 'cuando son las clases', 'turno'],
   revalidation: ['revalidacion', 'equivalencia', 'equivalencias', 'cambio de universidad', 'creditos'],
-  faq:          ['cuanto cuesta', 'cuanto es', 'precio', 'costo', 'colegiatura', 'mensualidad', 'incluye', 'rvoe', 'validez', 'sep', 'reconocida', 'oficial', 'practicas', 'servicio social'],
+  contact:      ['direccion', 'ubicacion', 'donde estan', 'como llegar', 'mapa', 'telefono', 'telefono', 'correo', 'email', 'contacto', 'whatsapp', 'whats'],
+  titulation:   ['titulo', 'titulacion', 'cedula', 'cedula profesional', 'certificado de estudios', 'examen profesional', 'validez nacional'],
+  exchange:     ['intercambio', 'convenio', 'movilidad', 'extranjero', 'internacional', 'otro pais'],
+  faq:          ['cuanto cuesta', 'cuanto es', 'precio', 'costo', 'colegiatura', 'mensualidad', 'incluye', 'rvoe', 'validez', 'sep', 'reconocida', 'oficial', 'practicas', 'servicio social', 'instalaciones', 'campus', 'laboratorio', 'biblioteca'],
   duration:     ['cuanto dura', 'duracion', 'cuantos años', 'cuantos semestres', 'cuantos meses', 'tiempo de estudio', 'cuando termino', 'cuanto tiempo'],
   greeting:     ['hola', 'buenas', 'buen dia', 'buenas tardes', 'buenas noches', 'saludos'],
 }
