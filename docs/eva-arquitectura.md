@@ -246,18 +246,52 @@ Input 2: "cuanto cuesta"
 
 ## 6. Fuentes de datos
 
-### 6.1. Supabase (primaria)
+> ⚠️ Sección corregida (jun 2026) tras verificar el código real en
+> `index.ts` y `responseBuilder.ts`. Ver también
+> `docs/fuente-de-verdad.md` para los datos institucionales vigentes.
 
-- **Tabla `careers`**: `id, name, slug, area, modality, monthly_price, enrollment_price, description, duration, job_field, student_profile, requirements, rvoe, is_featured`
-- **Tabla `faqs`**: `id, type (informational|conversational), triggers[], response, created_at`
+### 6.1. STATIC_FAQS (fuente real de las respuestas de Eva)
 
-### 6.2. STATIC_FAQS (fallback)
+`STATIC_FAQS` en `responseBuilder.ts` es la **única** fuente que Eva usa
+para responder preguntas de becas, documentos, admisión, costos, etc. No
+es un fallback — es lo que siempre se ejecuta.
 
-Respuestas hardcodeadas para 7 intenciones, usadas cuando Supabase no tiene FAQs o falla el fetch.
+### 6.2. Tabla `faqs` en Supabase — no usada
 
-### 6.3. AdminContext (frontend)
+`fetchAllData()` en `index.ts` trae `{ careers, faqs }` de
+`supabaseResolver.ts`, pero solo `careers` se pasa a `buildResponse()`.
+El valor `faqs` se descarta y nunca llega a generar una respuesta. Editar
+esta tabla desde el dashboard de Supabase **no tiene ningún efecto** en
+lo que Eva responde. Si se quiere que Eva sí use FAQs dinámicas desde
+Supabase, hace falta cambiar `buildResponse()` para que las consuma —
+hoy no lo hace.
 
-Datos de carreras desde el contexto React para componentes como `AdminContext.tsx`. No es usado directamente por Eva engine.
+### 6.3. Tabla `careers` en Supabase
+
+`fetchCareers()` en `supabaseResolver.ts` **no consulta Supabase** — está
+forzado a devolver siempre `DEFAULT_CAREERS` (hardcodeado en el mismo
+archivo), por un mismatch de formato de modalidad documentado en un
+comentario del código. Es decir: Eva tampoco usa la tabla `careers` de
+Supabase, usa su propia copia hardcodeada en TS.
+
+La tabla `careers` de Supabase sí se usa, pero **fuera de Eva**: la
+consultan directamente `Carreras.tsx` y `CarreraDetalle.tsx` para el
+catálogo y las fichas de carrera.
+
+### 6.4. AdminContext (frontend)
+
+Fallback de `Carreras.tsx` / `CarreraDetalle.tsx` cuando falla el fetch a
+Supabase. No es usado por Eva engine.
+
+### 6.5. Resumen — quién usa qué
+
+| Fuente | ¿La usa Eva? | ¿La usan las páginas de catálogo? |
+|---|---|---|
+| `STATIC_FAQS` (TS) | ✅ Sí, siempre | No |
+| Tabla `faqs` (Supabase) | ❌ No (se descarta) | No |
+| `DEFAULT_CAREERS` (TS) | ✅ Sí, siempre | No |
+| Tabla `careers` (Supabase) | ❌ No | ✅ Sí |
+| `AdminContext` (TS) | No | ✅ Solo si falla Supabase |
 
 ---
 
