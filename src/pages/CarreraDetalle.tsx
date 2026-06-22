@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAdmin } from '@/context/AdminContext'
 import type { Career } from '@/context/AdminContext'
@@ -22,14 +22,34 @@ function normalizeModality(m: string): Career['modality'] {
   return map[m] ?? 'presencial'
 }
 
+const isUUID = (value: string): boolean =>
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
+
 // ─── Area content maps ────────────────────────────────────────────────────────
 
+// ─── Hero images (local — load instantly) ──────────────────────────────────────
+
+const CAREER_IMG_HERO: Record<string, string> = {
+  'Licenciatura en Derecho':                      '/img-server/8001/01_derecho.webp',
+  'Licenciatura en Derecho (Online)':             '/img-server/8001/02_derecho_online.webp',
+  'Licenciatura en Psicología':                   '/img-server/8001/03_psicologia.webp',
+  'Licenciatura en Enfermería':                   '/img-server/8001/04_enfermeria.webp',
+  'Licenciatura en Nutrición':                    '/img-server/8001/05_nutricion.webp',
+  'Lic. en Negocios Internacionales':             '/img-server/8001/06_negocios_internacionales.webp',
+  'Lic. en Ventas y Mercadotecnia':               '/img-server/8001/07_ventas_mercadotecnia.webp',
+  'Lic. en Ventas y Mercadotecnia (Online)':      '/img-server/8001/08_ventas_mercadotecnia_online.webp',
+  'Licenciatura en Gastronomía':                  '/img-server/8001/12_gastronomia.webp',
+  'Ingeniería en Sistemas Computacionales':        '/img-server/8001/11_ingenieria_sistemas.webp',
+  'Licenciatura en Administración (Sabatina)':     '/img-server/8001/09_administracion_sabatina.webp',
+  'Lic. en Administración y Desarrollo Empresarial (Online)': '/img-server/8001/10_administracion_online.webp',
+}
+
 const AREA_IMG: Record<string, string> = {
-  'Derecho':     'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&q=80&fit=crop',
-  'Salud':       'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=80&fit=crop',
-  'Negocios':    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1600&q=80&fit=crop',
-  'Gastronomía': 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=1600&q=80&fit=crop',
-  'Tecnología':  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80&fit=crop',
+  'Derecho':     '/img-server/8001/01_derecho.webp',
+  'Salud':       '/img-server/8001/03_psicologia.webp',
+  'Negocios':    '/img-server/8001/06_negocios_internacionales.webp',
+  'Gastronomía': '/img-server/8001/12_gastronomia.webp',
+  'Tecnología':  '/img-server/8001/11_ingenieria_sistemas.webp',
 }
 
 const GRAD_PROFILE: Record<string, string[]> = {
@@ -300,19 +320,40 @@ export default function CarreraDetalle() {
   const navigate = useNavigate()
   const { values } = useAdmin()
   const [openSems, setOpenSems] = useState<Set<number>>(new Set([0]))
+  const [ready, setReady] = useState(false)
   const [career, setCareer] = useState<Career | null | undefined>(() => {
     // Render immediately from AdminContext instead of showing a loading spinner
     const found = values.careers.find((c) => c.id === id)
     return found ?? undefined
   })
 
-  useEffect(() => { window.scrollTo(0, 0) }, [id])
+  useLayoutEffect(() => {
+    // Prevent browser scroll restoration from flashing the previous scroll position
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+    window.scrollTo(0, 0)
+    document.documentElement.style.overflow = ''
+    // Wait two frames so the browser fully settles at scroll 0 before revealing
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setReady(true)
+      })
+    })
+    return () => {
+      if ('scrollRestoration' in history) history.scrollRestoration = 'auto'
+    }
+  }, [id])
 
   // Background enrichment from Supabase (non-blocking)
   useEffect(() => {
     if (!id) { setCareer(null); return }
     const fromContext = values.careers.find((c) => c.id === id)
     const load = async () => {
+      // Only query Supabase if the route param looks like a UUID;
+      // numeric IDs are handled via AdminContext local data.
+      if (!isUUID(id)) {
+        if (!fromContext) setCareer(null)
+        return
+      }
       try {
         const { data } = await supabase.from('careers').select('*').eq('id', id).single()
         if (data) {
@@ -381,7 +422,7 @@ export default function CarreraDetalle() {
     )
   }
 
-  const heroImg    = AREA_IMG[career.area]       ?? AREA_IMG['Negocios']
+  const heroImg    = CAREER_IMG_HERO[career.name] ?? AREA_IMG[career.area] ?? AREA_IMG['Negocios']
   const gradProfile = GRAD_PROFILE[career.area]  ?? GRAD_PROFILE['Negocios']
   const jobFields  = JOB_FIELDS[career.area]     ?? JOB_FIELDS['Negocios']
   const curriculum = CURRICULUM[career.area]     ?? CURRICULUM['Negocios']
@@ -417,11 +458,19 @@ export default function CarreraDetalle() {
     : 'Consultar precio'
 
   return (
-    <div className="flex flex-col bg-white min-h-dvh">
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      opacity: ready ? 1 : 0,
+      overflowY: 'auto',
+      zIndex: 1,
+      background: '#fff',
+    }}>
+      <div className="flex flex-col bg-white min-h-dvh">
 
       {/* ── Hero ────────────────────────────────────────────────────────────── */}
-      <section className="relative flex items-end min-h-[65vh] md:min-h-[75vh] overflow-hidden bg-[#1B3070]">
-        <img src={heroImg} alt={career.name} className="absolute inset-0 w-full h-full object-cover" />
+      <section className="relative flex items-end min-h-[65vh] md:min-h-[75vh] overflow-hidden bg-[#1B3070]"
+        style={{ backgroundImage: `url(${heroImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#06090f]/80 via-transparent to-transparent" />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 pb-14 md:pb-20 pt-28 md:pt-32">
@@ -788,9 +837,9 @@ export default function CarreraDetalle() {
 
       </div>
 
-      {/* Eva IA career widget */}
+      </div>
 
-    </div>
+      </div>
   )
 }
 
