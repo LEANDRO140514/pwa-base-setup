@@ -170,8 +170,11 @@ const STATIC_FAQS: Partial<Record<Intent, { response: string; pendingAction?: st
   revalidation: {
     response: 'Sí contamos con proceso de equivalencias. El área de Control Escolar evalúa tu historial académico para determinar qué materias aplican. ¿Quieres que te pongamos en contacto?',
   },
+  duration: {
+    response: 'La duración varía según la carrera:\n\n• Presencial: 3 a 4 años (según la carrera)\n• Sabatina: 3 años\n• En Línea: 3 años\n\nTodas incluyen prácticas profesionales y servicio social integrados en el plan de estudios.\n\n¿Te gustaría conocer las carreras disponibles en alguna modalidad?',
+  },
   faq: {
-    response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $8,000\n• Sabatina: $3,960/mes | Inscripción: $3,600\n• En Línea: $1,980/mes | Inscripción: $3,600',
+    response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $8,000\n• Sabatina: $3,960/mes | Inscripción: $3,600\n• En Línea: $1,980/mes | Inscripción: $3,600\n\nTodas las carreras incluyen prácticas profesionales y servicio social dentro del plan de estudios. Títulos con validez SEP oficial.',
   },
 }
 
@@ -248,6 +251,9 @@ export function buildResponse(
 
     case 'revalidation':
       return { text: STATIC_FAQS.revalidation!.response, source: 'faq', pendingAction: null, confidence: 1 }
+
+    case 'duration':
+      return { text: STATIC_FAQS.duration!.response, source: 'faq', pendingAction: null, confidence: 1 }
 
     case 'vocational':
       return {

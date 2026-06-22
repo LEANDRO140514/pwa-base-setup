@@ -13,6 +13,7 @@ export type Intent =
   | 'schedule'
   | 'revalidation'
   | 'vocational'
+  | 'duration'
   | 'confirmation_yes'
   | 'confirmation_no'
   | 'fallback'

@@ -85,24 +85,10 @@ export default function EvaIA() {
       const result = await resolveEvaMessage(userMsg.content, evaState)
       setEvaState(result.state)
 
-      // Append advisor CTA for high-intent messages
-      const waNumber = (values.whatsappNumber || '+529994538421').replace(/\D/g, '')
-      const HIGH_INTENT_INTENTS = ['career_detail', 'admission', 'scholarship']
-      const needsCTA = HIGH_INTENT_INTENTS.includes(result.intent) && (
-        userMsg.content.toLowerCase().includes('me interesa') ||
-        userMsg.content.toLowerCase().includes('inscribirme') ||
-        userMsg.content.toLowerCase().includes('quiero estudiar') ||
-        userMsg.content.toLowerCase().includes('quiero inscrib')
-      )
-
-      const responseText = needsCTA
-        ? `${result.response}\n\n¿Te gustaría que un asesor te ayude con tu proceso?\n👉 https://wa.me/${waNumber}`
-        : result.response
-
       setMessages((prev) => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: responseText,
+        content: result.response,
         timestamp: new Date(),
       }])
     } catch (err) {
@@ -190,13 +176,14 @@ export default function EvaIA() {
               }`}
             >
               {msg.content.split('\n').map((line, i) => {
-                const parts = line.split(/(https?:\/\/[^\s]+)/g)
+                // Render bold **text** markers
+                const parts = line.split(/(\*\*[^*]+\*\*)/g)
                 return (
                   <p key={i} className={i > 0 ? 'mt-2' : ''}>
                     {parts.map((part, j) =>
-                      /^https?:\/\//.test(part)
-                        ? <a key={j} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">{part}</a>
-                        : part.replace(/\*\*(.*?)\*\*/g, '$1')
+                      /^\*\*/.test(part)
+                        ? <strong key={j}>{part.slice(2, -2)}</strong>
+                        : part
                     )}
                   </p>
                 )

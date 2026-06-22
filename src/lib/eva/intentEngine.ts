@@ -9,10 +9,11 @@ const INTENT_KEYWORDS: Partial<Record<Intent, string[]>> = {
   scholarship:  ['beca', 'becas', 'descuento', 'apoyo economico', 'financiamiento', 'precio especial'],
   payment:      ['pagos', 'pago', 'mensualidades', 'meses sin intereses', 'forma de pago', 'pago anual', 'tarjeta', 'credito', 'meses', 'intereses', 'plazos'],
   documents:    ['documento', 'documentos', 'requisito', 'requisitos', 'papeles', 'certificado', 'curp', 'acta'],
-  admission:    ['inscripcion', 'inscribirme', 'admision', 'ingreso', 'como me inscribo', 'como entro'],
-  schedule:     ['horario', 'horarios', 'dias de clase', 'cuando son las clases', 'turno'],
+  admission:    ['inscripcion', 'inscribirme', 'admision', 'ingreso', 'examen', 'examen de admision', 'entrevista', 'como me inscribo', 'como entro'],
+  schedule:     ['horario', 'horarios', 'modalidad', 'modalidades', 'dias de clase', 'cuando son las clases', 'turno'],
   revalidation: ['revalidacion', 'equivalencia', 'equivalencias', 'cambio de universidad', 'creditos'],
-  faq:          ['cuanto cuesta', 'cuanto es', 'precio', 'costo', 'colegiatura', 'mensualidad', 'incluye', 'rvoe', 'validez', 'reconocida', 'oficial'],
+  faq:          ['cuanto cuesta', 'cuanto es', 'precio', 'costo', 'colegiatura', 'mensualidad', 'incluye', 'rvoe', 'validez', 'sep', 'reconocida', 'oficial', 'practicas', 'servicio social'],
+  duration:     ['cuanto dura', 'duracion', 'cuantos años', 'cuantos semestres', 'cuantos meses', 'tiempo de estudio', 'cuando termino', 'cuanto tiempo'],
   greeting:     ['hola', 'buenas', 'buen dia', 'buenas tardes', 'buenas noches', 'saludos'],
 }
 
@@ -37,9 +38,12 @@ export function detectIntent(
 ): Intent {
   const n = normalizedInput.trim()
 
-  // 1. Confirmation signals
-  if (CONFIRMATION_YES.some((c) => n === c || n.startsWith(c + ' '))) return 'confirmation_yes'
-  if (CONFIRMATION_NO.some((c) => n === c || n.startsWith(c + ' '))) return 'confirmation_no'
+  // 1. Confirmation signals — only match short inputs to avoid false positives
+  //    (e.g. "no sabes que modalidades?" should NOT be confirmation_no)
+  if (n.split(' ').length <= 2) {
+    if (CONFIRMATION_YES.some((c) => n === c || n.startsWith(c + ' '))) return 'confirmation_yes'
+    if (CONFIRMATION_NO.some((c) => n === c || n.startsWith(c + ' '))) return 'confirmation_no'
+  }
 
   // 2. Explicit career name → career_detail (highest data priority)
   if (entities.careerName) return 'career_detail'
