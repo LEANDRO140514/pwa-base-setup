@@ -12,6 +12,8 @@ const INTENT_KEYWORDS: Partial<Record<Intent, string[]>> = {
   admission:    ['inscripcion', 'inscribirme', 'admision', 'ingreso', 'examen', 'examen de admision', 'entrevista', 'como me inscribo', 'como entro'],
   schedule:     ['horario', 'horarios', 'modalidad', 'modalidades', 'dias de clase', 'cuando son las clases', 'turno'],
   revalidation: ['revalidacion', 'equivalencia', 'equivalencias', 'cambio de universidad', 'creditos'],
+  objection:    ['muy caro', 'no tengo dinero', 'no puedo pagar', 'fuera de mi presupuesto', 'mas barato', 'esta caro', 'muy costoso', 'no me alcanza'],
+  work_study:   ['trabajo y estudio', 'trabajo puedo estudiar', 'trabajo estudiar', 'estudiar y trabajar', 'trabajar y estudiar', 'combinar trabajo', 'estudio mientras trabajo', 'horario de trabajo'],
   contact:      ['direccion', 'ubicacion', 'donde estan', 'como llegar', 'mapa', 'telefono', 'telefono', 'correo', 'email', 'contacto', 'whatsapp', 'whats'],
   titulation:   ['titulo', 'titulacion', 'cedula', 'cedula profesional', 'certificado de estudios', 'examen profesional', 'validez nacional'],
   exchange:     ['intercambio', 'convenio', 'movilidad', 'extranjero', 'internacional', 'otro pais'],

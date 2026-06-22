@@ -23,7 +23,7 @@ export async function resolveEvaMessage(
   const normalized = normalizeInput(rawInput)
 
   // 2. Fetch all Supabase data (cached)
-  const { careers, faqs } = await fetchAllData()
+  const { careers } = await fetchAllData()
 
   // ── resolvePendingAction (before everything else) ────────────────────────
   if (prevState.pendingAction) {
@@ -59,7 +59,7 @@ export async function resolveEvaMessage(
   const intent = detectIntent(normalized, entities, prevState)
 
   // 5. Build response (single coherent answer)
-  const result = buildResponse(intent, entities, prevState, careers, faqs)
+  const result = buildResponse(intent, entities, prevState, careers)
 
   // 6. Update state
   const newState = updateConversationState(prevState, intent, entities, {

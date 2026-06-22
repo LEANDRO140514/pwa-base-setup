@@ -17,6 +17,8 @@ export type Intent =
   | 'contact'
   | 'titulation'
   | 'exchange'
+  | 'objection'
+  | 'work_study'
   | 'confirmation_yes'
   | 'confirmation_no'
   | 'fallback'

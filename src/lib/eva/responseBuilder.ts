@@ -1,6 +1,6 @@
 // ─── Eva Engine — Response builder ───────────────────────────────────────────
 
-import type { Intent, Entities, ConversationState, Career, FAQ, MatchedSource, Modality } from './types'
+import type { Intent, Entities, ConversationState, Career, MatchedSource, Modality } from './types'
 import { ONLINE_SYNONYMS, PRESENTIAL_SYNONYMS, SATURDAY_SYNONYMS } from './normalizer'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -128,12 +128,6 @@ function renderCareerDetail(
   return parts.join('\n')
 }
 
-// ── FAQ utilities ─────────────────────────────────────────────────────────────
-
-function findFAQByTriggers(faqs: FAQ[], ...keywords: string[]): FAQ | null {
-  return faqs.find((faq) => faq.triggers.some((t) => keywords.includes(n(t)))) ?? null
-}
-
 // ── Pending action handlers ───────────────────────────────────────────────────
 
 export const PENDING_ACTIONS: Record<string, (careers: Career[]) => string> = {
@@ -145,23 +139,23 @@ export const PENDING_ACTIONS: Record<string, (careers: Career[]) => string> = {
     return `Las clases sabatinas son los sábados de 8:00 a 13:00 hrs.\n\nIdeal para personas que trabajan de lunes a viernes.\n\n${list}\n\nMismo título y validez SEP. ¿Te interesa iniciar tu proceso de inscripción?`
   },
   show_admission_requirements: () =>
-    'El proceso de inscripción tiene 5 pasos:\n\n1. Solicitar información ✓\n2. Entrevista con un asesor\n3. Entrega de documentos\n4. Pago de inscripción\n5. Inicio de clases\n\nNo se requiere examen de admisión. ¿Te gustaría agendar tu entrevista?',
+    'El proceso de inscripción consta de 5 pasos:\n\n1. Orientación sobre la carrera de tu interés\n2. Revisión de requisitos y documentación\n3. Llenado del formato de inscripción\n4. Elección del tipo de pago (anual o semestral)\n5. Realización del pago y entrega de documentos\n\nNo se requiere examen de admisión. ¿Te gustaría agendar tu entrevista?',
   show_scholarship_detail: () =>
-    'Contamos con becas por aprovechamiento académico:\n\n🏆 Sobresaliente (9.60–10.00): 50% colegiatura + 50% inscripción\n⭐ Muy alto (9.00–9.59): 40% colegiatura + 50% inscripción\n✅ Alto (8.5–8.99): 30% colegiatura + 50% inscripción\n📌 Base (7.0–8.49): 50% descuento en inscripción\n\nPuedes calcular tu beca desde la sección "Mi Beca" en la app. ¿Te gustaría hacerlo?',
+    'Contamos con becas por aprovechamiento académico:\n\n🏆 Sobresaliente (9.60–10.00): 50% de beca en colegiaturas\n⭐ Muy alto (9.00–9.59): 40% de beca en colegiaturas\n✅ Alto (8.5–8.99): 30% de beca en colegiaturas\n📌 Base (7.0–8.49): 50% de descuento en inscripción\n\nPuedes calcular tu beca desde la sección "Mi Beca" en la app. ¿Te gustaría hacerlo?',
 }
 
 // ── Static FAQ fallbacks ──────────────────────────────────────────────────────
 
 const STATIC_FAQS: Partial<Record<Intent, { response: string; pendingAction?: string }>> = {
   scholarship: {
-    response: 'Contamos con becas por aprovechamiento académico:\n\n🏆 Sobresaliente (9.60–10.00): 50% colegiatura + 50% inscripción\n⭐ Muy alto (9.00–9.59): 40% colegiatura + 50% inscripción\n✅ Alto (8.5–8.99): 30% colegiatura + 50% inscripción\n📌 Base (7.0–8.49): 50% descuento en inscripción\n\n¿Te gustaría calcular tu beca desde la app?',
+    response: 'Contamos con becas por aprovechamiento académico:\n\n🏆 Sobresaliente (9.60–10.00): 50% de beca en colegiaturas\n⭐ Muy alto (9.00–9.59): 40% de beca en colegiaturas\n✅ Alto (8.5–8.99): 30% de beca en colegiaturas\n📌 Base (7.0–8.49): 50% de descuento en inscripción\n\n¿Te gustaría calcular tu beca desde la app?',
     pendingAction: 'show_scholarship_detail',
   },
   documents: {
-    response: 'Documentos requeridos: certificado de bachillerato, identificación oficial (INE/pasaporte), CURP, acta de nacimiento y 2 fotografías. Carreras de salud requieren adicionalmente carta de no antecedentes penales.',
+    response: 'Documentos requeridos para inscripción:\n\n• Acta de nacimiento\n• Certificado de bachillerato (original y copia)\n• CURP\n• Comprobante de domicilio\n\nSi tu certificado está en trámite, puedes iniciar con una constancia de estudios siempre que la entregues antes de iniciar clases.',
   },
   admission: {
-    response: 'El proceso de admisión no requiere examen. Incluye: solicitud de información, entrevista con asesor, entrega de documentos, pago de inscripción e inicio de clases.',
+    response: 'El proceso de admisión consta de 5 pasos:\n\n1. Orientación sobre la carrera de tu interés\n2. Revisión de requisitos y documentación\n3. Llenado del formato de inscripción\n4. Elección del tipo de pago (anual o semestral)\n5. Realización del pago y entrega de documentos\n\nNo se requiere examen de admisión. ¿Te gustaría agendar una llamada con un asesor para iniciar tu proceso?',
     pendingAction: 'show_admission_requirements',
   },
   schedule: {
@@ -183,7 +177,13 @@ const STATIC_FAQS: Partial<Record<Intent, { response: string; pendingAction?: st
     response: 'Contamos con convenios de colaboración e intercambio con instituciones nacionales e internacionales. Algunas de nuestras oportunidades incluyen:\n\n• Movilidad estudiantil internacional\n• Convenios con universidades extranjeras\n• Prácticas profesionales en el extranjero\n• Programas de internacionalización curricular\n\n¿Te gustaría conocer más sobre alguna carrera en particular?',
   },
   faq: {
-    response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $8,000\n• Sabatina: $3,960/mes | Inscripción: $3,600\n• En Línea: $1,980/mes | Inscripción: $3,600\n\nTodas las carreras incluyen prácticas profesionales y servicio social dentro del plan de estudios. Títulos con validez SEP oficial.',
+    response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $8,000\n• Sabatina: $3,960/mes | Inscripción: $3,600\n• En Línea: $1,980/mes | Inscripción: $3,600\n\nCostos adicionales:\n• Seguro de estudiante: $400/año (presencial)\n• Campos clínicos: $2,300–$3,000 (solo Enfermería y Nutrición)\n\nIncluido sin costo: Google Workspace, Biblioteca digital 122,000 títulos, Plataforma Moodle y 50 convenios de prácticas.',
+  },
+  objection: {
+    response: 'Entendemos que es una decisión importante. Universidad Latino cuenta con:\n\n✓ BECAS DE EXCELENCIA:\n  • 9.60–10.00: 50% de beca en colegiaturas\n  • 9.00–9.59: 40% de beca en colegiaturas\n  • 8.50–8.99: 30% de beca en colegiaturas\n  • 7.00–8.49: 50% de descuento en inscripción\n\n✓ Modalidades desde $1,980/mes (en línea)\n✓ Pago anual o semestral con descuento\n\n¿Quieres que calculemos tu costo con beca según tu promedio?',
+  },
+  work_study: {
+    response: 'Sí, muchos estudiantes combinan trabajo y estudio exitosamente. Opciones para ti:\n\n📱 En Línea: Clases Ma-Ju 20:00–22:00 hrs | Desde casa | $1,980/mes\n📅 Sabatina: Solo sábados 8:00–13:00 hrs | $3,960/mes\n\nAmbas con el mismo título y validez SEP. ¿Te gustaría conocer las carreras disponibles en alguna de estas modalidades?',
   },
 }
 
@@ -203,7 +203,6 @@ export function buildResponse(
   entities: Entities,
   state: ConversationState,
   careers: Career[],
-  faqs: FAQ[],
 ): BuildResult {
   const effectiveModality: Modality | null = entities.modality ?? (state.currentModality as Modality | null)
 
@@ -231,29 +230,16 @@ export function buildResponse(
 
     case 'payment':
       return {
-        text: 'Universidad Latino ofrece opciones de pago en mensualidades o pago anual con descuento. No tengo información específica sobre meses sin intereses con tarjeta. ¿Te gustaría que un asesor te ayude a revisar las opciones de pago disponibles?',
+        text: 'Universidad Latino ofrece opciones de pago en mensualidades o pago anual/semestral con descuento. No manejamos pagos a meses sin intereses. ¿Te gustaría que un asesor te ayude a revisar las opciones disponibles?',
         source: 'faq', pendingAction: null, confidence: 1,
       }
 
-    case 'documents': {
-      const faq = findFAQByTriggers(faqs, 'documentos', 'requisitos', 'papeles')
-      return {
-        text: faq?.response ?? STATIC_FAQS.documents!.response,
-        source: faq ? 'faq' : 'fallback',
-        pendingAction: null,
-        confidence: 1,
-      }
-    }
+    // Intents with Supabase table dependencies removed (use static responses only)
+    case 'documents':
+      return { text: STATIC_FAQS.documents!.response, source: 'faq', pendingAction: null, confidence: 1 }
 
-    case 'admission': {
-      const faq = findFAQByTriggers(faqs, 'inscripcion', 'admision')
-      return {
-        text: faq?.response ?? STATIC_FAQS.admission!.response,
-        source: faq ? 'faq' : 'fallback',
-        pendingAction: 'show_admission_requirements',
-        confidence: 1,
-      }
-    }
+    case 'admission':
+      return { text: STATIC_FAQS.admission!.response, source: 'faq', pendingAction: 'show_admission_requirements', confidence: 1 }
 
     case 'schedule':
       return { text: STATIC_FAQS.schedule!.response, source: 'faq', pendingAction: null, confidence: 1 }
@@ -272,6 +258,12 @@ export function buildResponse(
 
     case 'exchange':
       return { text: STATIC_FAQS.exchange!.response, source: 'faq', pendingAction: null, confidence: 1 }
+
+    case 'objection':
+      return { text: STATIC_FAQS.objection!.response, source: 'faq', pendingAction: null, confidence: 1 }
+
+    case 'work_study':
+      return { text: STATIC_FAQS.work_study!.response, source: 'faq', pendingAction: null, confidence: 1 }
 
     case 'vocational':
       return {
