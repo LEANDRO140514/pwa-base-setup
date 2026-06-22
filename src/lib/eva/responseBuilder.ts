@@ -220,10 +220,10 @@ export function buildResponse(
     }
 
     case 'scholarship': {
-      const faq = findFAQByTriggers(faqs, 'beca', 'becas', 'descuento')
+      // Always use static response — ignore Supabase FAQs to avoid stale data
       return {
-        text: faq?.response ?? STATIC_FAQS.scholarship!.response,
-        source: faq ? 'faq' : 'fallback',
+        text: STATIC_FAQS.scholarship!.response,
+        source: 'faq',
         pendingAction: 'show_scholarship_detail',
         confidence: 1,
       }
