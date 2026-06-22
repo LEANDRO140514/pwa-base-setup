@@ -106,24 +106,12 @@ function CareerSection({
   onRef: (el: HTMLElement | null) => void
 }) {
   const ref = useRef<HTMLElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  // Native IntersectionObserver — no framer-motion overhead
+  const isVisible = true
+  // onRef registers the element for the side dot navigation — always needed
   useEffect(() => {
     const el = ref.current
     if (!el) return
     onRef(el)
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          obs.unobserve(el)
-        }
-      },
-      { threshold: 0.2 },
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
   }, [onRef])
 
   const bgImg = career.image || CAREER_IMG[career.name] || AREA_IMG[career.area] || CAREER_IMG['Nutrición']

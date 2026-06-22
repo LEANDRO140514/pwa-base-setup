@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAdmin } from '@/context/AdminContext'
 import { useTestModal } from '@/context/TestModalContext'
 import type { Career } from '@/context/AdminContext'
@@ -84,7 +84,6 @@ const MODALITY_LABELS: Record<string, string> = {
 
 export default function Inicio() {
   const { values } = useAdmin()
-  const navigate = useNavigate()
   const { openTest } = useTestModal()
   const waNumber = (values.whatsappNumber || '+529994538421').replace(/\D/g, '')
 
@@ -103,10 +102,6 @@ export default function Inicio() {
     setTimeout(() => {
       careersRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 80)
-  }
-
-  function handleCareerClick(career: Career) {
-    navigate(`/carrera/${career.id}`)
   }
 
   return (
@@ -256,7 +251,7 @@ export default function Inicio() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredCareers.map((career, i) => (
-              <CareerCard key={career.id} career={career} delay={i * 50} onClick={() => handleCareerClick(career)} />
+              <CareerCard key={career.id} career={career} delay={i * 50} />
             ))}
           </div>
         </div>
@@ -511,12 +506,12 @@ function BenefitCard({ title, desc, img }: { title: string; desc: string; img: s
   )
 }
 
-function CareerCard({ career, delay, onClick }: { career: Career; delay: number; onClick: () => void }) {
+function CareerCard({ career, delay }: { career: Career; delay: number }) {
   const img = CAREER_IMG[career.name] ?? AREA_META[career.area]?.img ?? AREA_META['Negocios'].img
   return (
     <FadeUp delay={delay}>
-      <div onClick={onClick}
-        className="relative group overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer bg-gray-900 hover:shadow-2xl transition-shadow duration-300">
+      <Link to={`/carrera/${career.id}`}
+        className="relative group overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer bg-gray-900 hover:shadow-2xl transition-shadow duration-300 block">
         <img src={img} alt={career.name} loading="lazy"
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent group-hover:from-[#1B3070]/90 group-hover:via-[#1B3070]/45 transition-all duration-500" />
@@ -540,7 +535,7 @@ function CareerCard({ career, delay, onClick }: { career: Career; delay: number;
             </svg>
           </div>
         </div>
-      </div>
+      </Link>
     </FadeUp>
   )
 }
