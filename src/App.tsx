@@ -6,7 +6,7 @@ import TestVocacionalModal from '@/components/TestVocacionalModal'
 import NavBar from '@/components/layout/NavBar'
 import BottomBar from '@/components/layout/BottomBar'
 import WhatsAppFAB from '@/components/WhatsAppFAB'
-import EvaFAB from '@/components/EvaFAB'
+// import EvaFAB from '@/components/EvaFAB'  // suspended until Eva Admisiones decision
 import Inicio from '@/pages/Inicio'
 import Carreras from '@/pages/Carreras'
 import EvaIA from '@/pages/EvaIA'
@@ -22,7 +22,7 @@ function WebShell() {
       <NavBar />
       <Outlet />
       <BottomBar />
-      <EvaFAB />
+      {/* <EvaFAB />  suspended */}
       <WhatsAppFAB />
       <TestVocacionalModal />
     </div>

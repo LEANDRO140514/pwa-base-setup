@@ -454,7 +454,7 @@ export default function CarreraDetalle() {
   }
 
   const priceLabel = c.monthlyFee
-    ? `Desde ${c.monthlyFee} con beca`
+    ? `Desde ${c.monthlyFee}`
     : 'Consultar precio'
 
   return (

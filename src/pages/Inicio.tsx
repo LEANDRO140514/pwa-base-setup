@@ -387,7 +387,7 @@ export default function Inicio() {
                   { label: 'Proceso de admisión', to: '/carreras' },
                   { label: 'Becas disponibles', to: '/mi-beca' },
                   { label: 'Test Vocacional', action: 'test' },
-                  { label: 'Eva IA', to: '/eva-ia' },
+                  // { label: 'Eva IA', to: '/eva-ia' },  // suspended
                   { label: 'La Universidad', to: '/universidad' },
                 ].map((item) => (
                   <li key={item.label}>

@@ -6,7 +6,7 @@ const NAV_LINKS = [
   { to: '/',            label: 'Inicio',      end: true },
   { to: '/carreras',    label: 'Carreras',    end: false },
   { to: '/universidad', label: 'Universidad', end: false },
-  { to: '/eva-ia',      label: 'Eva IA',      end: false },
+  // { to: '/eva-ia',  label: 'Eva IA',      end: false },  // suspended
 ]
 
 export default function NavBar() {
