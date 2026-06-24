@@ -4,6 +4,7 @@
 const GHL_WEBHOOK_URL = import.meta.env.VITE_GHL_WEBHOOK_URL as string
 
 export interface ProspectPayload {
+  // ── Core lead data ──────────────────────────────────────────────────────
   firstName: string
   lastName?: string
   email: string
@@ -12,6 +13,37 @@ export interface ProspectPayload {
   source: string
   tags?: string[]
   customFields?: Record<string, string>
+
+  // ── Flat fields for GHL segmentation (snake_case for easy GHL mapping) ─
+  origen?: string              // "carreras-landing"
+  lead_type?: string           // "beca_carreras"
+  funnel?: string              // "admisiones_2026"
+  interest?: string            // "beca"
+  career_name?: string         // full career name
+  career_id?: string           // career ID from DB
+  modality?: string | null    // "En línea" / "Presencial" / null
+  average_range?: string       // "9.60-10.00"
+  scholarship_level?: string   // "Sobresaliente"
+  scholarship_percent?: number // 50 | 40 | 30 | 0
+  enrollment_discount_percent?: number // 50
+  tuition_base?: number        // monthly tuition before discount
+  enrollment_base?: number     // enrollment fee before discount
+  tuition_final?: number       // monthly tuition after discount
+  enrollment_final?: number    // enrollment fee after discount
+  wa_stage?: string            // WhatsApp automation stage
+  tags_string?: string         // tags as comma-separated string
+
+  // ── UTM / attribution data ──────────────────────────────────────────────
+  utmSource?: string
+  utmMedium?: string
+  utmCampaign?: string
+  utmContent?: string
+  utmTerm?: string
+  fbclid?: string
+  gclid?: string
+  landingSource?: string
+  firstPageSeen?: string
+  lastPageSeen?: string
 }
 
 /**

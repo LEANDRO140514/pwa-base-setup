@@ -1,21 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import TopBar from '@/components/layout/TopBar'
 import PageLayout from '@/components/layout/PageLayout'
 import { useAdmin } from '@/context/AdminContext'
-import { supabase } from '@/lib/supabase'
+import { captureProspect } from '@/lib/ghl'
 import { useTestModal } from '@/context/TestModalContext'
+import { trackClickBeca, trackLead, trackStartTest } from '@/lib/tracking'
+import { applySEO } from '@/lib/seo'
+import { getAttributionData } from '@/lib/utm'
 
 type Step = 'info' | 'form' | 'success'
 
 // ─── Scholarship levels ───────────────────────────────────────────────────────
+
+// ⚠️ Scholarship rules (institutional, campaña vigente):
+//   - Todos los niveles elegibles reciben 50% de descuento en inscripción
+//   - La beca en colegiatura varía según promedio (50%/40%/30%/0%)
+//   - Promedio < 7.00 → canalizar con asesor
+//   - La beca en colegiatura está sujeta a validación
 
 const BECA_LEVELS = [
   {
     id: 'sobresaliente',
     label: 'Sobresaliente',
     range: '9.60 – 10.00',
-    beca: 'Beca 50% colegiatura + 50% inscripción',
+    beca: 'Beca 50% en colegiatura + 50% descuento en inscripción',
     color: '#059669',
     bg: '#ecfdf5',
   },
@@ -23,7 +32,7 @@ const BECA_LEVELS = [
     id: 'muy-alto',
     label: 'Muy alto',
     range: '9.00 – 9.59',
-    beca: 'Beca 40% colegiatura + 50% inscripción',
+    beca: 'Beca 40% en colegiatura + 50% descuento en inscripción',
     color: '#2563eb',
     bg: '#eff6ff',
   },
@@ -31,7 +40,7 @@ const BECA_LEVELS = [
     id: 'alto',
     label: 'Alto',
     range: '8.5 – 8.99',
-    beca: 'Beca 30% colegiatura + 50% inscripción',
+    beca: 'Beca 30% en colegiatura + 50% descuento en inscripción',
     color: '#7c3aed',
     bg: '#f5f3ff',
   },
@@ -44,6 +53,14 @@ const BECA_LEVELS = [
     bg: '#fffbeb',
   },
 ]
+
+// ─── Enrollment discount per level (50% for all campaign-eligible levels) ──────
+const ENROLLMENT_DISCOUNT: Record<string, number> = {
+  sobresaliente: 0.5,
+  'muy-alto': 0.5,
+  alto: 0.5,
+  base: 0.5,
+}
 
 // ─── Tuition discount per level ───────────────────────────────────────────────
 
@@ -95,6 +112,22 @@ export default function MiBeca() {
     () => localStorage.getItem('selectedBecaLevel')
   )
 
+  // ── SEO ──────────────────────────────────────────────────────────────────
+  useEffect(() => {
+    applySEO({
+      title: 'Becas | Universidad Latino',
+      description: 'Calcula tu beca universitaria según tu promedio. Becas de hasta 50% en colegiatura sujeta a validación. Universidad Latino Mérida.',
+    })
+  }, [])
+
+  // ── Tracking: ClickBeca when level selected ──────────────────────────────
+  useEffect(() => {
+    if (selectedLevel) {
+      const level = BECA_LEVELS.find(l => l.id === selectedLevel)
+      trackClickBeca({ nivel: level?.label, beca: level?.beca })
+    }
+  }, [selectedLevel])
+
   const selectLevel = (id: string) => {
     const next = selectedLevel === id ? null : id
     setSelectedLevel(next)
@@ -114,18 +147,63 @@ export default function MiBeca() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+
+    const attribution = getAttributionData()
+    const level = BECA_LEVELS.find(l => l.id === selectedLevel)
+    const tags = ['pwa', 'beca-solicitada', level?.id ?? '']
+
+    // ── Calculate pricing ─────────────────────────────────────────────
+    const tuitionDiscount = level ? (TUITION_DISCOUNT[level.id] ?? 0) : 0
+    const enrollmentDiscount = level ? (ENROLLMENT_DISCOUNT[level.id] ?? 0.5) : 0.5
+    const tuitionBase = selectedCareer ? parsePriceMXN(selectedCareer.monthly_price) : 0
+    const enrollmentBase = selectedCareer ? parsePriceMXN(selectedCareer.enrollment_price) : 0
+    const tuitionFinal = tuitionBase * (1 - tuitionDiscount)
+    const enrollmentFinal = enrollmentBase * (1 - enrollmentDiscount)
+
     try {
-      await supabase.from('leads').insert([{
-        nombre: `${form.firstName}${form.lastName ? ' ' + form.lastName : ''}`,
+      await captureProspect({
+        firstName: form.firstName,
+        lastName: form.lastName,
         email: form.email,
-        telefono: form.phone || null,
-        career: form.career || selectedCareer?.name || null,
+        phone: form.phone || undefined,
+        career: form.career || selectedCareer?.name || undefined,
         source: 'pwa-mi-beca',
-        tags: ['pwa', 'beca-solicitada'],
-      }])
+        tags,
+        // ── Enriched flat fields for GHL ──────────────────────────────
+        origen: 'carreras-landing',
+        lead_type: 'beca_carreras',
+        funnel: 'admisiones_2026',
+        interest: 'beca',
+        career_name: selectedCareer?.name,
+        career_id: selectedCareer?.id,
+        modality: selectedCareer?.modality ?? null,
+        average_range: level?.range,
+        scholarship_level: level?.label,
+        scholarship_percent: tuitionDiscount * 100,
+        enrollment_discount_percent: enrollmentDiscount * 100,
+        tuition_base: tuitionBase > 0 ? tuitionBase : undefined,
+        enrollment_base: enrollmentBase > 0 ? enrollmentBase : undefined,
+        tuition_final: tuitionBase > 0 ? tuitionFinal : undefined,
+        enrollment_final: enrollmentBase > 0 ? enrollmentFinal : undefined,
+        wa_stage: 'interes_beca',
+        tags_string: tags.join(','),
+        // ── UTMs ──────────────────────────────────────────────────────
+        utmSource: attribution.utm_source,
+        utmMedium: attribution.utm_medium,
+        utmCampaign: attribution.utm_campaign,
+        utmContent: attribution.utm_content,
+        utmTerm: attribution.utm_term,
+        fbclid: attribution.fbclid,
+        gclid: attribution.gclid,
+        landingSource: attribution.landing_source,
+        firstPageSeen: attribution.first_page_seen,
+        lastPageSeen: attribution.last_page_seen,
+      })
+      trackLead({ tipo: 'beca-solicitada', nivel: level?.label })
       setStep('success')
     } catch (err) {
       console.error(err)
+      trackLead({ tipo: 'beca-solicitada', nivel: level?.label })
       setStep('success') // show success even if DB fails
     } finally {
       setLoading(false)
@@ -269,7 +347,8 @@ export default function MiBeca() {
               const tuitionBase = hasCareer ? parsePriceMXN(selectedCareer!.monthly_price) : 0
               const enrollmentBase = hasCareer ? parsePriceMXN(selectedCareer!.enrollment_price) : 0
               const tuitionFinal = tuitionBase * (1 - tuitionDiscount)
-              const enrollmentFinal = enrollmentBase * 0.5
+              const enrollmentDiscount = ENROLLMENT_DISCOUNT[level.id] ?? 0.5
+              const enrollmentFinal = enrollmentBase * (1 - enrollmentDiscount)
 
               return (
                 <div
@@ -336,7 +415,7 @@ export default function MiBeca() {
                         Explorar carreras
                       </Link>
                       <button
-                        onClick={openTest}
+                        onClick={() => { trackStartTest(); openTest() }}
                         className="flex-1 text-center py-3 rounded-xl text-sm font-black text-white active:scale-95 transition-transform"
                         style={{ background: level.color }}
                       >
@@ -466,6 +545,11 @@ export default function MiBeca() {
               >
                 {loading ? 'Enviando...' : 'Solicitar beca'}
               </button>
+
+              {/* ── Privacy consent notice ──────────────────────────────── */}
+              <p className="text-xs text-gray-400 text-center leading-relaxed mt-2 mb-4">
+                Al enviar tus datos aceptas ser contactado por Universidad Latino para recibir información de admisiones, becas y seguimiento por WhatsApp.
+              </p>
 
               <button
                 type="button"

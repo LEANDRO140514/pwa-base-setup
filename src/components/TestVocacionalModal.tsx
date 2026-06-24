@@ -1,10 +1,16 @@
 import { useEffect } from 'react'
 import { useTestModal } from '@/context/TestModalContext'
+import { trackStartTest } from '@/lib/tracking'
 
 const TEST_URL = 'https://testunilatino.algorithmus.io/'
 
 export default function TestVocacionalModal() {
   const { isOpen, closeTest } = useTestModal()
+
+  // Fire StartTest event when modal opens
+  useEffect(() => {
+    if (isOpen) trackStartTest()
+  }, [isOpen])
 
   // Close on Escape key
   useEffect(() => {

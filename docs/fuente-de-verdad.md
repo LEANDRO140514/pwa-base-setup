@@ -34,22 +34,22 @@ excepciones a esta regla en ninguna carrera actual.
 
 ---
 
-## 2. Becas de excelencia
+## 2. Becas — campaña vigente
 
-Esquema de 4 tramos según promedio de bachillerato. **Cada tramo es
-independiente — no se acumulan entre sí:**
+Esquema de 4 tramos según promedio de bachillerato. Durante la campaña
+vigente, **todos los niveles elegibles** reciben 50% de descuento en
+inscripción. La beca en colegiatura varía según el promedio:
 
-| Promedio | Beneficio | Aplica a |
+| Promedio | Beca en colegiatura | Descuento en inscripción |
 |---|---|---|
-| 9.60 – 10.00 | 50% de beca | **Solo colegiatura** |
-| 9.00 – 9.59 | 40% de beca | **Solo colegiatura** |
-| 8.50 – 8.99 | 30% de beca | **Solo colegiatura** |
-| 7.00 – 8.49 | 50% de descuento | **Solo inscripción** |
+| 9.60 – 10.00 | 50% | 50% |
+| 9.00 – 9.59 | 40% | 50% |
+| 8.50 – 8.99 | 30% | 50% |
+| 7.00 – 8.49 | Sin beca | 50% |
+| Menor a 7.00 | Canalizar con asesor | — |
 
-⚠️ Error común a evitar: el esquema **no** es "50% colegiatura + 50%
-inscripción" en los tres tramos altos. El descuento de inscripción
-aplica únicamente al tramo más bajo (7.00–8.49). Un promedio de 9.8, por
-ejemplo, obtiene 50% en colegiatura pero paga la inscripción completa.
+La beca en colegiatura está **sujeta a validación**. El 50% de descuento
+en inscripción aplica para nuevos ingresos durante la campaña vigente.
 
 Requisitos para mantener la beca: promedio mínimo, estar al corriente
 con pagos, sin sanciones disciplinarias.

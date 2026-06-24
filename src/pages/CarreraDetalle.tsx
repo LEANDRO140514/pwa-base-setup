@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAdmin } from '@/context/AdminContext'
 import type { Career } from '@/context/AdminContext'
 import { supabase } from '@/lib/supabase'
+import { trackViewCarrera } from '@/lib/tracking'
+import { applySEO, resetSEO } from '@/lib/seo'
 
 function formatPrice(price: string | number | null | undefined, suffix = '/mes'): string | undefined {
   if (price === null || price === undefined || price === '') return undefined
@@ -389,6 +391,17 @@ export default function CarreraDetalle() {
     return () => { localStorage.removeItem('evaCareerContext') }
   }, [career])
 
+  // ── SEO + Tracking: ViewCarrera event ──────────────────────────────────
+  useEffect(() => {
+    if (!career) return
+    applySEO({
+      title: `${career.name} | Universidad Latino`,
+      description: `${career.name} en modalidad ${career.modality}. RVOE SEP. ${career.description?.slice(0, 120)}...`,
+    })
+    trackViewCarrera({ carrera: career.name, area: career.area, modalidad: career.modality })
+    return resetSEO
+  }, [career])
+
   // Must define all hooks before any early return (React Rules of Hooks)
   const handleDownloadHTML = useCallback(() => {
     if (!career) return
@@ -758,15 +771,15 @@ export default function CarreraDetalle() {
                   Estudia con hasta<br />50% de beca
                 </h2>
                 <p className="text-white/55 text-sm leading-relaxed">
-                  El monto de tu beca se determina por tu promedio académico. Cuanto más alto, mayor es tu descuento en colegiatura e inscripción.
+                  El monto de tu beca se determina por tu promedio académico. Todos los niveles reciben 50% de descuento en inscripción durante la campaña vigente.
                 </p>
               </div>
               <div className="space-y-3">
                 {[
-                  { label: 'Sobresaliente', range: '9.60 – 10.00', beca: '50% colegiatura + 50% inscripción', color: '#059669' },
-                  { label: 'Muy alto',      range: '9.00 – 9.59', beca: '40% colegiatura + 50% inscripción', color: '#2563eb' },
-                  { label: 'Alto',          range: '8.5 – 8.99', beca: '30% colegiatura + 50% inscripción', color: '#7c3aed' },
-                  { label: 'Base',          range: '7.0 – 8.49',   beca: '50% descuento en inscripción',      color: '#d97706' },
+                  { label: 'Sobresaliente', range: '9.60 – 10.00', beca: 'Beca 50% en colegiatura + 50% descuento en inscripción', color: '#059669' },
+                  { label: 'Muy alto',      range: '9.00 – 9.59', beca: 'Beca 40% en colegiatura + 50% descuento en inscripción', color: '#2563eb' },
+                  { label: 'Alto',          range: '8.5 – 8.99', beca: 'Beca 30% en colegiatura + 50% descuento en inscripción', color: '#7c3aed' },
+                  { label: 'Base',          range: '7.0 – 8.49',   beca: '50% de descuento en inscripción',                         color: '#d97706' },
                 ].map((level) => (
                   <div key={level.label} className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3">
                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: level.color }} />

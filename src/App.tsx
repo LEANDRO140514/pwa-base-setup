@@ -1,4 +1,5 @@
-import { Navigate, Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AdminProvider } from '@/context/AdminContext'
 import { TestModalProvider } from '@/context/TestModalContext'
@@ -15,8 +16,24 @@ import Admin from '@/pages/Admin'
 import Intro from '@/pages/Intro'
 import Universidad from '@/pages/Universidad'
 import CarreraDetalle from '@/pages/CarreraDetalle'
+import { initPixel, trackPageView } from '@/lib/tracking'
+import { captureAttribution, updateLastPageSeen } from '@/lib/utm'
 
 function WebShell() {
+  const location = useLocation()
+
+  // ── Init tracking + UTM capture on first mount ────────────────────────
+  useEffect(() => {
+    initPixel()
+    captureAttribution()
+  }, [])
+
+  // ── Track page views + update last page seen on every route change ────
+  useEffect(() => {
+    trackPageView(location.pathname)
+    updateLastPageSeen(location.pathname)
+  }, [location])
+
   return (
     <div className="min-h-dvh flex flex-col">
       <NavBar />

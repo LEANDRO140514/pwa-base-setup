@@ -350,7 +350,7 @@ export default function Universidad() {
               </div>
               <img
                 src="/buho-mascota.png"
-                alt="Búho UNILATINO"
+                alt="Milo, mascota Búho UNILATINO"
                 className="w-48 md:w-64 lg:w-80 object-contain drop-shadow-2xl flex-shrink-0"
               />
             </div>

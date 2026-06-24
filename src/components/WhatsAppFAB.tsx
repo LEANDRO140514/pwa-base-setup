@@ -1,4 +1,5 @@
 import { useAdmin } from '@/context/AdminContext'
+import { trackClickWhatsApp } from '@/lib/tracking'
 
 export default function WhatsAppFAB() {
   const { values } = useAdmin()
@@ -11,6 +12,7 @@ export default function WhatsAppFAB() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contactar por WhatsApp"
+      onClick={() => trackClickWhatsApp({ origen: 'fab-flotante' })}
       className="group fixed z-50 right-5 bottom-[5.5rem] md:bottom-6 transition-opacity"
     >
       {/* Tooltip */}

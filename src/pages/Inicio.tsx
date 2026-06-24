@@ -1,8 +1,9 @@
 import { useRef, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAdmin } from '@/context/AdminContext'
 import { useTestModal } from '@/context/TestModalContext'
 import type { Career } from '@/context/AdminContext'
+import { applySEO } from '@/lib/seo'
 
 // ─── Scroll-reveal hook ───────────────────────────────────────────────────────
 
@@ -85,7 +86,16 @@ const MODALITY_LABELS: Record<string, string> = {
 export default function Inicio() {
   const { values } = useAdmin()
   const { openTest } = useTestModal()
+  const location = useLocation()
   const waNumber = (values.whatsappNumber || '+529994538421').replace(/\D/g, '')
+
+  // ── SEO ──────────────────────────────────────────────────────────────────
+  useEffect(() => {
+    applySEO({
+      title: 'Universidad Latino | Inicio | Licenciaturas en Mérida, Yucatán',
+      description: 'Universidad Latino en Mérida. Licenciaturas presenciales, en línea y sabatinas con RVOE SEP. Becas de hasta 50% sujeta a validación. ¡Inscripciones abiertas!',
+    })
+  }, [location.pathname])
 
   const [selectedArea, setSelectedArea] = useState<string | null>(null)
   const careersRef = useRef<HTMLDivElement>(null)
@@ -425,7 +435,12 @@ export default function Inicio() {
               <span className="text-[10px] font-black uppercase tracking-[0.2em]">Inicio</span>
             </button>
           </div>
-          <div className="border-t border-white/8 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="border-t border-white/8 pt-4 pb-2 space-y-1">
+            <p className="text-white/15 text-[10px] leading-relaxed text-center">
+              *Beca de hasta 50% en colegiatura sujeta a validación. 50% de descuento en inscripción para nuevos ingresos durante la campaña vigente. Aplica términos y condiciones.
+            </p>
+          </div>
+          <div className="pt-3 flex flex-col md:flex-row items-center justify-between gap-3">
             <p className="text-white/20 text-xs">© 2026 {values.appName}. Todos los derechos reservados. · RVOE SEP</p>
             <p className="text-white/15 text-xs">{values.appTagline}</p>
           </div>
@@ -517,7 +532,7 @@ function CareerCard({ career, delay }: { career: Career; delay: number }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent group-hover:from-[#1B3070]/90 group-hover:via-[#1B3070]/45 transition-all duration-500" />
         <div className="absolute top-4 left-4">
           <span className="bg-[#E6B400] text-[#1B3070] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wide">
-            Hasta 50% beca
+            Beca hasta 50%*
           </span>
         </div>
         <div className="absolute top-4 right-4">
