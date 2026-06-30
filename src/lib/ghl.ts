@@ -1,7 +1,9 @@
 // ─── GoHighLevel (GHL) Webhook Integration ─────────────────────────────────
-// Sends prospect data to a GHL workflow via webhook
+// Sends prospect data to a GHL workflow via Supabase Edge Function (proxy).
+// The edge function forwards to GHL server-to-server to avoid CORS.
 
-const GHL_WEBHOOK_URL = import.meta.env.VITE_GHL_WEBHOOK_URL as string
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
 
 export interface ProspectPayload {
   // ── Core lead data ──────────────────────────────────────────────────────
@@ -47,19 +49,23 @@ export interface ProspectPayload {
 }
 
 /**
- * Sends a prospect/lead to GHL via webhook
+ * Sends a prospect/lead to GHL via Supabase Edge Function proxy.
+ * The edge function forwards to GHL server-to-server, avoiding CORS.
  */
 export async function sendToGHL(payload: ProspectPayload): Promise<boolean> {
-  if (!GHL_WEBHOOK_URL) {
-    console.warn('[GHL] VITE_GHL_WEBHOOK_URL not set – skipping webhook.')
+  const fnUrl = `${SUPABASE_URL}/functions/v1/ghl-proxy`
+
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    console.warn('[GHL] Supabase credentials missing – skipping GHL proxy.')
     return false
   }
 
   try {
-    const response = await fetch(GHL_WEBHOOK_URL, {
+    const response = await fetch(fnUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
       },
       body: JSON.stringify({
         ...payload,
@@ -69,13 +75,14 @@ export async function sendToGHL(payload: ProspectPayload): Promise<boolean> {
     })
 
     if (!response.ok) {
-      console.error('[GHL] Webhook failed:', response.status, response.statusText)
+      const body = await response.text().catch(() => '')
+      console.error('[GHL] Proxy failed:', response.status, body)
       return false
     }
 
     return true
   } catch (err) {
-    console.error('[GHL] Webhook error:', err)
+    console.error('[GHL] Proxy error:', err)
     return false
   }
 }
