@@ -1,3 +1,0 @@
-# Exclude Supabase Edge Functions from Docker build context
-# so Nixpacks doesn't detect Deno instead of Node.js
-supabase/
