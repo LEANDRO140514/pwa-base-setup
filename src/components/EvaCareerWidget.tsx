@@ -140,7 +140,7 @@ export default function EvaCareerWidget({ career }: { career: Career }) {
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const waNumber = (values.whatsappNumber || '+529994538421').replace(/\D/g, '')
+  const waNumber = (values.whatsappNumber || '+529993226393').replace(/\D/g, '')
 
   // Auto-bubble: 3–5 seconds after mount
   useEffect(() => {
