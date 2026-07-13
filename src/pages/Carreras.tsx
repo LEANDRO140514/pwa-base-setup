@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import TopBar from '@/components/layout/TopBar'
 import { supabase } from '@/lib/supabase'
 import { useAdmin } from '@/context/AdminContext'
+import { applySEO } from '@/lib/seo'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -208,6 +209,14 @@ function CareerSection({
 export default function Carreras() {
   const navigate = useNavigate()
   const { values } = useAdmin()
+
+  // ── SEO ──────────────────────────────────────────────────────────────
+  useEffect(() => {
+    applySEO({
+      title: 'Carreras | Universidad Latino',
+      description: 'Licenciaturas presenciales, en línea y sabatinas con RVOE SEP en Mérida, Yucatán. Derecho, Psicología, Enfermería, Nutrición, Sistemas, Ventas, Negocios y Gastronomía.',
+    })
+  }, [])
   // Render immediately from AdminContext — no Supabase wait
   const [careers, setCareers] = useState<Career[]>(() => {
     if (careersCache !== null) return careersCache

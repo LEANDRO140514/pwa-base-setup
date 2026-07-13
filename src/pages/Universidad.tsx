@@ -1,8 +1,9 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import TopBar from '@/components/layout/TopBar'
 import HistoryStorySection from '@/components/HistoryStorySection'
+import { applySEO } from '@/lib/seo'
 
 // ─── Scroll-reveal wrapper ────────────────────────────────────────────────────
 
@@ -69,6 +70,14 @@ const BUHOS_TIMELINE = [
 export default function Universidad() {
   const navigate = useNavigate()
   const [activeBuhoYear, setActiveBuhoYear] = useState(0)
+
+  // ── SEO ──────────────────────────────────────────────────────────────
+  useEffect(() => {
+    applySEO({
+      title: 'Universidad Latino | Nosotros',
+      description: 'Conoce la historia, misión y valores de Universidad Latino en Mérida, Yucatán. Formando líderes con RVOE SEP desde 1987.',
+    })
+  }, [])
 
   // Parallax ref for Búhos section
   const buhosRef = useRef<HTMLElement>(null)

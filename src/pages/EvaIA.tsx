@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import TopBar from '@/components/layout/TopBar'
 import { useAdmin } from '@/context/AdminContext'
 import { resolveEvaMessage, EMPTY_STATE, type ConversationState } from '@/lib/eva'
+import { applySEO } from '@/lib/seo'
 
 interface Message {
   id: string
@@ -41,6 +42,14 @@ function getInitialMessages(): Message[] {
 export default function EvaIA() {
   const { values } = useAdmin()
   const navigate = useNavigate()
+
+  // ── SEO ──────────────────────────────────────────────────────────────
+  useEffect(() => {
+    applySEO({
+      title: 'Eva IA | Asesora Académica | Universidad Latino',
+      description: 'Eva, tu asesora académica virtual. Resuelve tus dudas sobre carreras, becas, admisión y más en Universidad Latino Mérida.',
+    })
+  }, [])
   const [messages, setMessages] = useState<Message[]>(getInitialMessages)
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)

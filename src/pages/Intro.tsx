@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useAdmin } from '@/context/AdminContext'
 import { useTestModal } from '@/context/TestModalContext'
+import { applySEO } from '@/lib/seo'
 
 // ─── Scroll-reveal hook ───────────────────────────────────────────────────────
 
@@ -63,6 +64,14 @@ export default function Intro() {
   const navigate = useNavigate()
   const { openTest } = useTestModal()
   const waNumber = (values.whatsappNumber || '+529993226393').replace(/\D/g, '')
+
+  // ── SEO ──────────────────────────────────────────────────────────────
+  useEffect(() => {
+    applySEO({
+      title: 'Universidad Latino | Licenciaturas en Mérida, Yucatán',
+      description: 'Licenciaturas presenciales, en línea y sabatinas con RVOE SEP. Becas de hasta 50% sujeta a validación. ¡Inscripciones abiertas!',
+    })
+  }, [])
 
   return (
     <div className="w-full overflow-x-hidden">

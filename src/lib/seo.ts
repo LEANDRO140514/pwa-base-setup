@@ -5,7 +5,7 @@
 export const DEFAULT_TITLE = 'Universidad Latino | Licenciaturas en Mérida, Yucatán'
 export const DEFAULT_DESC =
   'Universidad Latino en Mérida, Yucatán. Licenciaturas con RVOE SEP. Becas de hasta 50% sujeta a validación.'
-export const DEFAULT_CANONICAL = 'https://testunilatino.algorithmus.io/'
+export const DEFAULT_CANONICAL = 'https://carreras.unilatino.algorithmus.io/'
 
 export interface SEOProps {
   title?: string
