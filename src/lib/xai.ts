@@ -1,7 +1,8 @@
-// ─── xAI (Grok) Realtime Voice Agent — WebSocket client ─────────────────────
+// ─── xAI (Grok) Voice Agent — Client via Supabase Edge Function Proxy ──────
 
-const XAI_API_KEY = import.meta.env.VITE_XAI_API_KEY as string | undefined
-const AGENT_ID = 'agent_NTEp6jVGAxR36e4X'
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
+const PROXY_URL = `${SUPABASE_URL}/functions/v1/xai-proxy`
 
 export type MessageRole = 'user' | 'assistant'
 export type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'error'
@@ -14,117 +15,70 @@ export interface ChatMessage {
 export interface XAIClientCallbacks {
   onStatusChange: (status: ConnectionStatus) => void
   onMessage: (msg: ChatMessage) => void
-  onAudioDelta: (base64Pcm: string) => void
-  onTranscriptDelta: (text: string) => void
+  onAudioData: (base64Pcm: string) => void
   onError: (error: string) => void
 }
 
 export function createXAIClient(callbacks: XAIClientCallbacks) {
-  let ws: WebSocket | null = null
-  let currentAssistantMessage = ''
+  let isConnected = false
 
   function connect() {
-    if (!XAI_API_KEY) {
-      callbacks.onError('XAI_API_KEY no configurada. Agrega VITE_XAI_API_KEY en .env')
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      callbacks.onError('Supabase no configurado correctamente')
       callbacks.onStatusChange('error')
       return
     }
 
-    callbacks.onStatusChange('connecting')
-
-    try {
-      // Browser WebSocket doesn't support custom headers, so we pass
-      // the API key as a query parameter for auth
-      const url = `wss://api.x.ai/v1/realtime?agent_id=${AGENT_ID}&api_key=${XAI_API_KEY}`
-      ws = new WebSocket(url)
-    } catch {
-      callbacks.onError('Error al crear conexión WebSocket')
-      callbacks.onStatusChange('error')
-      return
-    }
-
-    ws.onopen = () => {
-      callbacks.onStatusChange('connected')
-    }
-
-    ws.onmessage = (event: MessageEvent) => {
-      try {
-        const data = JSON.parse(event.data as string)
-        handleEvent(data)
-      } catch {
-        // ignore parse errors
-      }
-    }
-
-    ws.onerror = () => {
-      callbacks.onError('Error de conexión con el agente de voz')
-      callbacks.onStatusChange('error')
-    }
-
-    ws.onclose = () => {
-      callbacks.onStatusChange('disconnected')
-    }
+    callbacks.onStatusChange('connected')
+    isConnected = true
   }
 
-  function handleEvent(event: Record<string, unknown>) {
-    switch (event.type) {
-      case 'response.output_audio_transcript.delta':
-        currentAssistantMessage += (event.delta as string) || ''
-        callbacks.onTranscriptDelta(event.delta as string)
-        break
-
-      case 'response.output_audio.delta':
-        callbacks.onAudioDelta(event.delta as string)
-        break
-
-      case 'response.output_audio_transcript.done':
-        if (currentAssistantMessage.trim()) {
-          callbacks.onMessage({ role: 'assistant', text: currentAssistantMessage.trim() })
-        }
-        currentAssistantMessage = ''
-        break
-
-      case 'response.done':
-        if (currentAssistantMessage.trim()) {
-          callbacks.onMessage({ role: 'assistant', text: currentAssistantMessage.trim() })
-        }
-        currentAssistantMessage = ''
-        break
-
-      case 'error':
-        callbacks.onError((event.message as string) || 'Error del agente')
-        break
-    }
-  }
-
-  function sendText(text: string) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) {
+  async function sendText(text: string) {
+    if (!isConnected) {
       callbacks.onError('No hay conexión activa')
       return
     }
 
-    // Add user message
-    ws.send(JSON.stringify({
-      type: 'conversation.item.create',
-      item: {
-        type: 'message',
-        role: 'user',
-        content: [{ type: 'input_text', text }],
-      },
-    }))
-
-    // Trigger response
-    ws.send(JSON.stringify({ type: 'response.create' }))
-
     callbacks.onMessage({ role: 'user', text })
+
+    try {
+      const response = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({ message: text }),
+      })
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({ error: 'Error desconocido' }))
+        callbacks.onError(err.error || `Error HTTP ${response.status}`)
+        return
+      }
+
+      const data = await response.json()
+
+      // Play audio chunks sequentially
+      if (data.audioBase64 && Array.isArray(data.audioBase64)) {
+        for (const chunk of data.audioBase64) {
+          callbacks.onAudioData(chunk)
+        }
+      }
+
+      // Show transcript
+      if (data.transcript) {
+        callbacks.onMessage({ role: 'assistant', text: data.transcript })
+      }
+    } catch (error) {
+      callbacks.onError(
+        error instanceof Error ? error.message : 'Error de conexión con el agente de voz'
+      )
+    }
   }
 
   function disconnect() {
-    if (ws) {
-      ws.close()
-      ws = null
-    }
-    currentAssistantMessage = ''
+    isConnected = false
     callbacks.onStatusChange('disconnected')
   }
 

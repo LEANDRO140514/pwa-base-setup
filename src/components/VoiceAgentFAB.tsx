@@ -15,8 +15,7 @@ export default function VoiceAgentFAB() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Habla con Eva por voz"
-        className="group fixed z-[9999] cursor-pointer"
-        style={{ bottom: '20px', right: '20px' }}
+        className="group fixed z-[9999] cursor-pointer right-5 bottom-[152px] md:bottom-[88px]"
       >
         {/* Tooltip */}
         <span className="

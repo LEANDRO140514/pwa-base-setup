@@ -51,7 +51,7 @@ export default function VoiceAgentPanel({ onClose }: Props) {
   const [input, setInput] = useState('')
   const [isListening, setIsListening] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [transcriptBuffer, setTranscriptBuffer] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const clientRef = useRef<ReturnType<typeof createXAIClient>>()
@@ -60,7 +60,7 @@ export default function VoiceAgentPanel({ onClose }: Props) {
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, transcriptBuffer])
+  }, [messages])
 
   // Initialize xAI client
   useEffect(() => {
@@ -68,15 +68,15 @@ export default function VoiceAgentPanel({ onClose }: Props) {
       onStatusChange: setStatus,
       onMessage: (msg) => {
         setMessages((prev) => [...prev, msg])
-        setTranscriptBuffer('')
+        setIsLoading(false)
       },
-      onAudioDelta: (base64Pcm) => {
+      onAudioData: (base64Pcm) => {
         playPcmAudio(base64Pcm)
       },
-      onTranscriptDelta: (text) => {
-        setTranscriptBuffer((prev) => prev + text)
+      onError: (err) => {
+        setError(err)
+        setIsLoading(false)
       },
-      onError: (err) => setError(err),
     })
 
     clientRef.current = client
@@ -145,22 +145,23 @@ export default function VoiceAgentPanel({ onClose }: Props) {
   // Send message
   const handleSend = useCallback(() => {
     const text = input.trim()
-    if (!text || !clientRef.current) return
+    if (!text || !clientRef.current || isLoading) return
 
+    setIsLoading(true)
+    setError(null)
     clientRef.current.sendText(text)
     setInput('')
-    setError(null)
-  }, [input])
+  }, [input, isLoading])
 
   // Handle Enter key
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
+      if (e.key === 'Enter' && !e.shiftKey && !isLoading) {
         e.preventDefault()
         handleSend()
       }
     },
-    [handleSend]
+    [handleSend, isLoading]
   )
 
   // Handle microphone toggle
@@ -211,7 +212,7 @@ export default function VoiceAgentPanel({ onClose }: Props) {
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
-          {messages.length === 0 && !transcriptBuffer && (
+          {messages.length === 0 && !isLoading && (
             <div className="text-center text-gray-400 text-sm mt-8">
               <p className="font-medium text-gray-500 mb-1">Habla con Eva por voz</p>
               <p>Escribe un mensaje o usa el micrófono para comenzar</p>
@@ -235,11 +236,15 @@ export default function VoiceAgentPanel({ onClose }: Props) {
             </div>
           ))}
 
-          {/* Streaming transcript */}
-          {transcriptBuffer && (
+          {/* Loading indicator */}
+          {isLoading && (
             <div className="flex justify-start">
-              <div className="max-w-[80%] rounded-2xl rounded-bl-md px-4 py-2.5 text-sm leading-relaxed bg-gray-100 text-gray-500 italic">
-                {transcriptBuffer}
+              <div className="rounded-2xl rounded-bl-md px-4 py-2.5 bg-gray-100">
+                <div className="flex gap-1.5">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
               </div>
             </div>
           )}
@@ -281,12 +286,12 @@ export default function VoiceAgentPanel({ onClose }: Props) {
               onKeyDown={handleKeyDown}
               placeholder="Escribe tu mensaje..."
               className="flex-1 bg-gray-50 rounded-full px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#1B3070]/20 focus:bg-white transition-all"
-              disabled={status !== 'connected'}
+              disabled={status !== 'connected' || isLoading}
             />
 
             <button
               onClick={handleSend}
-              disabled={!input.trim() || status !== 'connected'}
+              disabled={!input.trim() || status !== 'connected' || isLoading}
               className="w-10 h-10 rounded-full bg-[#1B3070] text-white flex items-center justify-center shrink-0 disabled:opacity-40 hover:bg-[#1B3070]/90 transition-all"
               aria-label="Enviar"
             >
