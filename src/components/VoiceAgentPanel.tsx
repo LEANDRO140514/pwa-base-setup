@@ -1,45 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { createXAIClient, playPcmAudio, stopAudio, type ChatMessage, type ConnectionStatus } from '@/lib/xai'
+import { recordAudio, stopRecording } from '@/lib/audioCapture'
 import { trackContact } from '@/lib/tracking'
-
-// ── SpeechRecognition type declarations ────────────────────────────────────
-declare global {
-  interface Window {
-    SpeechRecognition: new () => SpeechRecognition
-    webkitSpeechRecognition: new () => SpeechRecognition
-  }
-}
-
-interface SpeechRecognition extends EventTarget {
-  lang: string
-  continuous: boolean
-  interimResults: boolean
-  start: () => void
-  stop: () => void
-  onresult: ((event: SpeechRecognitionEvent) => void) | null
-  onend: (() => void) | null
-  onerror: ((event: { error: string }) => void) | null
-}
-
-interface SpeechRecognitionEvent {
-  results: SpeechRecognitionResultList
-}
-
-interface SpeechRecognitionResultList {
-  length: number
-  [index: number]: SpeechRecognitionResult
-}
-
-interface SpeechRecognitionResult {
-  [index: number]: SpeechRecognitionAlternative
-  isFinal: boolean
-  length: number
-}
-
-interface SpeechRecognitionAlternative {
-  transcript: string
-  confidence: number
-}
 
 interface Props {
   onClose: () => void
@@ -49,13 +11,12 @@ export default function VoiceAgentPanel({ onClose }: Props) {
   const [status, setStatus] = useState<ConnectionStatus>('disconnected')
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
-  const [isListening, setIsListening] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const clientRef = useRef<ReturnType<typeof createXAIClient>>()
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -98,51 +59,7 @@ export default function VoiceAgentPanel({ onClose }: Props) {
     }
   }, [status])
 
-  // Speech recognition setup
-  const startListening = useCallback(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    if (!SpeechRecognition) {
-      setError('Tu navegador no soporta reconocimiento de voz')
-      return
-    }
-
-    const recognition = new SpeechRecognition()
-    recognition.lang = 'es-MX'
-    recognition.continuous = false
-    recognition.interimResults = true
-
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
-      const results = event.results
-      const transcript = []
-      for (let i = 0; i < results.length; i++) {
-        transcript.push(results[i][0].transcript)
-      }
-      setInput(transcript.join(''))
-    }
-
-    recognition.onend = () => {
-      setIsListening(false)
-    }
-
-    recognition.onerror = () => {
-      setIsListening(false)
-      setError('Error al reconocer voz. Intenta de nuevo.')
-    }
-
-    recognitionRef.current = recognition
-    recognition.start()
-    setIsListening(true)
-  }, [])
-
-  const stopListening = useCallback(() => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop()
-      recognitionRef.current = null
-    }
-    setIsListening(false)
-  }, [])
-
-  // Send message
+  // Send text message
   const handleSend = useCallback(() => {
     const text = input.trim()
     if (!text || !clientRef.current || isLoading) return
@@ -164,14 +81,30 @@ export default function VoiceAgentPanel({ onClose }: Props) {
     [handleSend, isLoading]
   )
 
-  // Handle microphone toggle
-  const handleMicToggle = useCallback(() => {
-    if (isListening) {
-      stopListening()
-    } else {
-      startListening()
+  // Handle microphone toggle — record audio and send to xAI
+  const handleMicToggle = useCallback(async () => {
+    if (isRecording) {
+      stopRecording()
+      setIsRecording(false)
+      return
     }
-  }, [isListening, startListening, stopListening])
+
+    if (!clientRef.current) return
+
+    setError(null)
+    setIsRecording(true)
+
+    try {
+      const { base64 } = await recordAudio()
+      setIsRecording(false)
+      setIsLoading(true)
+      clientRef.current.sendAudio(base64)
+    } catch (err) {
+      setIsRecording(false)
+      setIsLoading(false)
+      setError(err instanceof Error ? err.message : 'Error al grabar audio')
+    }
+  }, [isRecording])
 
   return (
     <div className="fixed inset-0 z-[9998] flex items-end justify-center">
@@ -215,7 +148,7 @@ export default function VoiceAgentPanel({ onClose }: Props) {
           {messages.length === 0 && !isLoading && (
             <div className="text-center text-gray-400 text-sm mt-8">
               <p className="font-medium text-gray-500 mb-1">Habla con Eva por voz</p>
-              <p>Escribe un mensaje o usa el micrófono para comenzar</p>
+              <p>Presiona el micrófono y comienza a hablar</p>
             </div>
           )}
 
@@ -267,11 +200,11 @@ export default function VoiceAgentPanel({ onClose }: Props) {
             <button
               onClick={handleMicToggle}
               className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${
-                isListening
+                isRecording
                   ? 'bg-red-500 text-white animate-pulse shadow-lg'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
-              aria-label={isListening ? 'Detener micrófono' : 'Activar micrófono'}
+              aria-label={isRecording ? 'Detener grabación' : 'Grabar mensaje de voz'}
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                 <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
@@ -284,14 +217,14 @@ export default function VoiceAgentPanel({ onClose }: Props) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Escribe tu mensaje..."
+              placeholder="O escribe tu mensaje..."
               className="flex-1 bg-gray-50 rounded-full px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#1B3070]/20 focus:bg-white transition-all"
-              disabled={status !== 'connected' || isLoading}
+              disabled={status !== 'connected' || isLoading || isRecording}
             />
 
             <button
               onClick={handleSend}
-              disabled={!input.trim() || status !== 'connected' || isLoading}
+              disabled={!input.trim() || status !== 'connected' || isLoading || isRecording}
               className="w-10 h-10 rounded-full bg-[#1B3070] text-white flex items-center justify-center shrink-0 disabled:opacity-40 hover:bg-[#1B3070]/90 transition-all"
               aria-label="Enviar"
             >

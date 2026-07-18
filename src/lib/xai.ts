@@ -77,12 +77,56 @@ export function createXAIClient(callbacks: XAIClientCallbacks) {
     }
   }
 
+  async function sendAudio(base64Pcm: string) {
+    if (!isConnected) {
+      callbacks.onError('No hay conexión activa')
+      return
+    }
+
+    callbacks.onMessage({ role: 'user', text: '🎤 Mensaje de voz' })
+
+    try {
+      const response = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({ audio: base64Pcm }),
+      })
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({ error: 'Error desconocido' }))
+        callbacks.onError(err.error || `Error HTTP ${response.status}`)
+        return
+      }
+
+      const data = await response.json()
+
+      // Play audio chunks sequentially
+      if (data.audioBase64 && Array.isArray(data.audioBase64)) {
+        for (const chunk of data.audioBase64) {
+          callbacks.onAudioData(chunk)
+        }
+      }
+
+      // Show transcript
+      if (data.transcript) {
+        callbacks.onMessage({ role: 'assistant', text: data.transcript })
+      }
+    } catch (error) {
+      callbacks.onError(
+        error instanceof Error ? error.message : 'Error de conexión con el agente de voz'
+      )
+    }
+  }
+
   function disconnect() {
     isConnected = false
     callbacks.onStatusChange('disconnected')
   }
 
-  return { connect, sendText, disconnect }
+  return { connect, sendText, sendAudio, disconnect }
 }
 
 // ── Audio playback helper ──────────────────────────────────────────────────
