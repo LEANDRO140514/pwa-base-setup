@@ -29,3 +29,7 @@ npm-debug.log*
 Thumbs.db
 
 .vercel
+
+# Supabase — Edge Functions deployed via dashboard, not via git
+# (keeps Nixpacks from detecting Deno and breaking Node.js build)
+supabase/
