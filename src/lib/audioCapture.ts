@@ -134,7 +134,6 @@ export function stopRecording() {
     resolveRecord = null
     rejectRecord = null
   } catch (err) {
-    rejectRecord = null
     if (rejectRecord) {
       rejectRecord(err instanceof Error ? err : new Error('Error al procesar audio'))
     }
