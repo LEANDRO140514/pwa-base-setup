@@ -8,7 +8,7 @@ import NavBar from '@/components/layout/NavBar'
 import BottomBar from '@/components/layout/BottomBar'
 import WhatsAppFAB from '@/components/WhatsAppFAB'
 // import EvaFAB from '@/components/EvaFAB'  // suspended until Eva Admisiones decision
-import VoiceAgentFAB from '@/components/VoiceAgentFAB'
+// import VoiceAgentFAB from '@/components/VoiceAgentFAB'  // suspended — xAI voice agent pending
 import Inicio from '@/pages/Inicio'
 import Carreras from '@/pages/Carreras'
 import EvaIA from '@/pages/EvaIA'
@@ -42,7 +42,7 @@ function WebShell() {
       <BottomBar />
       {/* <EvaFAB />  suspended */}
       <WhatsAppFAB />
-      <VoiceAgentFAB />
+      {/* <VoiceAgentFAB />  suspended — xAI voice agent pending */}
       <TestVocacionalModal />
     </div>
   )
