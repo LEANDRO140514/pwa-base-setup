@@ -3,7 +3,7 @@ import { trackClickWhatsApp } from '@/lib/tracking'
 
 export default function WhatsAppFAB() {
   const { values } = useAdmin()
-  const waNumber = (values.whatsappNumber || '+529993226393').replace(/\D/g, '')
+  const waNumber = (values.whatsappNumber || '+529991444478').replace(/\D/g, '')
   const url = `https://wa.me/${waNumber}?text=Hola%2C%20me%20interesa%20información%20sobre%20las%20carreras%20de%20Universidad%20Latino.`
 
   return (

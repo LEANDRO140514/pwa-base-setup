@@ -444,7 +444,7 @@ export default function CarreraDetalle() {
 
   const c = career
 
-  const waNumber = (values.whatsappNumber || '+529993226393').replace(/\D/g, '')
+  const waNumber = (values.whatsappNumber || '+529991444478').replace(/\D/g, '')
   const waMsg = `https://wa.me/${waNumber}?text=Hola%2C%20quiero%20iniciar%20mi%20proceso%20de%20admisi%C3%B3n%20en%20${encodeURIComponent(c.name)}%20en%20Universidad%20Latino.`
 
   function handleSolicitar() {

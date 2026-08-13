@@ -63,7 +63,7 @@ export default function Intro() {
   const { values } = useAdmin()
   const navigate = useNavigate()
   const { openTest } = useTestModal()
-  const waNumber = (values.whatsappNumber || '+529993226393').replace(/\D/g, '')
+  const waNumber = (values.whatsappNumber || '+529991444478').replace(/\D/g, '')
 
   // ── SEO ──────────────────────────────────────────────────────────────
   useEffect(() => {

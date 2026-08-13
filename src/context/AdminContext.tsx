@@ -52,7 +52,7 @@ const defaultCustomValues: CustomValues = {
   appTagline: 'Educación que transforma',
   contactEmail: 'informes@universidadlatino.edu.mx',
   contactPhone: '999-322-6393',
-  whatsappNumber: '+529993226393',
+  whatsappNumber: '+529991444478',
   address: 'Calle 7 Tablaje 15542 x 4 y 6, Santa Rita Cholul, Mérida, Yucatán',
   hero: {
     headline: 'Educación que transforma vidas',
@@ -254,6 +254,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       const saved = localStorage.getItem('ul_custom_values')
       if (saved) {
         const parsed = JSON.parse(saved)
+        if (parsed.whatsappNumber === '+529993226393') {
+          parsed.whatsappNumber = defaultCustomValues.whatsappNumber
+        }
         return { ...defaultCustomValues, ...parsed, careers: defaultCustomValues.careers }
       }
       return defaultCustomValues
