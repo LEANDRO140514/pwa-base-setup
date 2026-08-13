@@ -306,7 +306,7 @@ function buildCareerHTML(career: Career, curriculum: string[][], values: Record<
 <div class="section" style="background:#f8fafc;border-radius:12px;margin:0 48px 32px;padding:24px">
   <p style="font-size:14px;color:#4b5563;margin:0 0 8px;font-weight:700">¿Listo para comenzar?</p>
   <p style="font-size:13px;color:#6b7280;margin:0">Contáctanos por WhatsApp para iniciar tu proceso de admisi&oacute;n.</p>
-  <p style="font-size:13px;color:#1B3070;margin-top:8px"><strong>${values.contactPhone || '999-322-6393'}</strong> · ${values.contactEmail || 'informes@universidadlatino.edu.mx'}</p>
+  <p style="font-size:13px;color:#1B3070;margin-top:8px"><strong>${values.contactPhone || '999-144-4478'}</strong> · ${values.contactEmail || 'informes@universidadlatino.edu.mx'}</p>
 </div>
 <div class="footer">
   <strong>${values.appName || 'Universidad Latino'}</strong> · ${values.address || 'Mérida, Yucatán'} · RVOE SEP<br>

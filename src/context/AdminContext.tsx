@@ -51,7 +51,7 @@ const defaultCustomValues: CustomValues = {
   appName: 'Universidad Latino',
   appTagline: 'Educación que transforma',
   contactEmail: 'informes@universidadlatino.edu.mx',
-  contactPhone: '999-322-6393',
+  contactPhone: '999-144-4478',
   whatsappNumber: '+529991444478',
   address: 'Calle 7 Tablaje 15542 x 4 y 6, Santa Rita Cholul, Mérida, Yucatán',
   hero: {
@@ -248,16 +248,38 @@ const AdminContext = createContext<AdminContextType | null>(null)
 
 // ─── Provider ──────────────────────────────────────────────────────────────
 
+const RETIRED_WHATSAPP_DIGITS = new Set(['529993226393', '9993226393'])
+
+function phoneDigits(value: unknown): string {
+  return String(value ?? '').replace(/\D/g, '')
+}
+
+function replaceRetiredContact(parsed: { whatsappNumber?: string; contactPhone?: string }): boolean {
+  let changed = false
+  if (RETIRED_WHATSAPP_DIGITS.has(phoneDigits(parsed.whatsappNumber))) {
+    parsed.whatsappNumber = defaultCustomValues.whatsappNumber
+    changed = true
+  }
+  if (RETIRED_WHATSAPP_DIGITS.has(phoneDigits(parsed.contactPhone))) {
+    parsed.contactPhone = defaultCustomValues.contactPhone
+    changed = true
+  }
+  return changed
+}
+
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [values, setValues] = useState<CustomValues>(() => {
     try {
       const saved = localStorage.getItem('ul_custom_values')
       if (saved) {
         const parsed = JSON.parse(saved)
-        if (parsed.whatsappNumber === '+529993226393') {
-          parsed.whatsappNumber = defaultCustomValues.whatsappNumber
+        const migratedParsed = replaceRetiredContact(parsed)
+        const merged = { ...defaultCustomValues, ...parsed, careers: defaultCustomValues.careers }
+        const migratedMerged = replaceRetiredContact(merged)
+        if (migratedParsed || migratedMerged) {
+          localStorage.setItem('ul_custom_values', JSON.stringify(merged))
         }
-        return { ...defaultCustomValues, ...parsed, careers: defaultCustomValues.careers }
+        return merged
       }
       return defaultCustomValues
     } catch {
