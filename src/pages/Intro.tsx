@@ -316,7 +316,7 @@ export default function Intro() {
               },
               {
                 label: 'Explora programas',
-                sub: '12 carreras · RVOE SEP',
+                sub: '11 carreras · RVOE SEP',
                 to: '/carreras',
                 external: false,
               },
