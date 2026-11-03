@@ -69,7 +69,7 @@ export default function Intro() {
   useEffect(() => {
     applySEO({
       title: 'Universidad Latino | Licenciaturas en Mérida, Yucatán',
-      description: 'Licenciaturas presenciales, en línea y sabatinas con RVOE SEP. Becas de hasta 50% sujeta a validación. ¡Inscripciones abiertas!',
+      description: 'Licenciaturas presenciales y en línea con RVOE SEP. Becas de hasta 50% sujeta a validación. ¡Inscripciones abiertas!',
     })
   }, [])
 

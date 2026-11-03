@@ -40,11 +40,10 @@ const CAREER_IMG: Record<string, string> = {
   'Enfermería':                                      '/img-server/8001/04_enfermeria.webp',
   'Nutrición':                                       '/img-server/8001/05_nutricion.webp',
   'Negocios Internacionales':                        '/img-server/8001/06_negocios_internacionales.webp',
-  'Ventas y Mercadotecnia':                          '/img-server/8001/07_ventas_mercadotecnia.webp',
+  'Mercadotecnia Global':                          '/img-server/8001/07_ventas_mercadotecnia.webp',
   'Ventas y Mercadotecnia Online':                   '/img-server/8001/08_ventas_mercadotecnia_online.webp',
   'Gastronomía':                                     '/img-server/8001/12_gastronomia.webp',
   'Ingeniería en Sistemas Computacionales':           '/img-server/8001/11_ingenieria_sistemas.webp',
-  'Administración Sabatina':                         '/img-server/8001/09_administracion_sabatina.webp',
   'Administración y Desarrollo Empresarial Online':  '/img-server/8001/10_administracion_online.webp',
   // AdminContext names (full - fallback)
   'Licenciatura en Derecho':                      '/img-server/8001/01_derecho.webp',
@@ -53,10 +52,9 @@ const CAREER_IMG: Record<string, string> = {
   'Licenciatura en Enfermería':                   '/img-server/8001/04_enfermeria.webp',
   'Licenciatura en Nutrición':                    '/img-server/8001/05_nutricion.webp',
   'Lic. en Negocios Internacionales':             '/img-server/8001/06_negocios_internacionales.webp',
-  'Lic. en Ventas y Mercadotecnia':               '/img-server/8001/07_ventas_mercadotecnia.webp',
+  'Lic. en Mercadotecnia Global':               '/img-server/8001/07_ventas_mercadotecnia.webp',
   'Lic. en Ventas y Mercadotecnia (Online)':      '/img-server/8001/08_ventas_mercadotecnia_online.webp',
   'Licenciatura en Gastronomía':                  '/img-server/8001/12_gastronomia.webp',
-  'Licenciatura en Administración (Sabatina)':     '/img-server/8001/09_administracion_sabatina.webp',
   'Lic. en Administración y Desarrollo Empresarial (Online)': '/img-server/8001/10_administracion_online.webp',
 }
 
@@ -214,7 +212,7 @@ export default function Carreras() {
   useEffect(() => {
     applySEO({
       title: 'Carreras | Universidad Latino',
-      description: 'Licenciaturas presenciales, en línea y sabatinas con RVOE SEP en Mérida, Yucatán. Derecho, Psicología, Enfermería, Nutrición, Sistemas, Ventas, Negocios y Gastronomía.',
+      description: 'Licenciaturas presenciales y en línea con RVOE SEP en Mérida, Yucatán. Derecho, Psicología, Enfermería, Nutrición, Sistemas, Mercadotecnia, Negocios y Gastronomía.',
     })
   }, [])
   // Render immediately from AdminContext — no Supabase wait

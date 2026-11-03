@@ -57,11 +57,10 @@ const CAREER_IMG: Record<string, string> = {
   'Licenciatura en Enfermería':                   '/img-server/8001/04_enfermeria.webp',
   'Licenciatura en Nutrición':                    '/img-server/8001/05_nutricion.webp',
   'Lic. en Negocios Internacionales':             '/img-server/8001/06_negocios_internacionales.webp',
-  'Lic. en Ventas y Mercadotecnia':               '/img-server/8001/07_ventas_mercadotecnia.webp',
+  'Lic. en Mercadotecnia Global':               '/img-server/8001/07_ventas_mercadotecnia.webp',
   'Lic. en Ventas y Mercadotecnia (Online)':      '/img-server/8001/08_ventas_mercadotecnia_online.webp',
   'Licenciatura en Gastronomía':                  '/img-server/8001/12_gastronomia.webp',
   'Ingeniería en Sistemas Computacionales':        '/img-server/8001/11_ingenieria_sistemas.webp',
-  'Licenciatura en Administración (Sabatina)':     '/img-server/8001/09_administracion_sabatina.webp',
   'Lic. en Administración y Desarrollo Empresarial (Online)': '/img-server/8001/10_administracion_online.webp',
 }
 const AREAS = ['Derecho', 'Salud', 'Negocios', 'Gastronomía', 'Tecnología']
@@ -93,7 +92,7 @@ export default function Inicio() {
   useEffect(() => {
     applySEO({
       title: 'Universidad Latino | Inicio | Licenciaturas en Mérida, Yucatán',
-      description: 'Universidad Latino en Mérida. Licenciaturas presenciales, en línea y sabatinas con RVOE SEP. Becas de hasta 50% sujeta a validación. ¡Inscripciones abiertas!',
+      description: 'Universidad Latino en Mérida. Licenciaturas presenciales y en línea con RVOE SEP. Becas de hasta 50% sujeta a validación. ¡Inscripciones abiertas!',
     })
   }, [location.pathname])
 

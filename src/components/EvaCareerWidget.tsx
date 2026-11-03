@@ -92,8 +92,8 @@ function buildFreeTextResponse(
   if (n.includes('asesor') || n.includes('hablar') || n.includes('llamar') || n.includes('contacto') || n.includes('whatsapp')) {
     return getQuickResponse('asesor', career, waNumber)
   }
-  if (n.includes('modalidad') || n.includes('horario') || n.includes('presencial') || n.includes('linea') || n.includes('sabatina')) {
-    const modLabels: Record<string, string> = { presencial: 'Presencial (lun–vie)', 'en-linea': 'En Línea (clases en vivo mar/jue 20–22 hrs)', sabatina: 'Sabatina (sábados 8–13 hrs)' }
+  if (n.includes('modalidad') || n.includes('horario') || n.includes('presencial') || n.includes('linea')) {
+    const modLabels: Record<string, string> = { presencial: 'Presencial (lun–vie)', 'en-linea': 'En Línea (clases en vivo mar/jue 20–22 hrs)' }
     return `**${career.name}** se ofrece en modalidad:\n\n• ${modLabels[career.modality] ?? career.modality}\n\nTodas las modalidades tienen el mismo título con validez SEP.\n\n¿Algo más en lo que te pueda ayudar?`
   }
   if (n.includes('rvoe') || n.includes('sep') || n.includes('validez') || n.includes('oficial')) {
