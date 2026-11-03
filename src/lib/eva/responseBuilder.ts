@@ -105,7 +105,7 @@ function renderCareerDetail(
 
   // Multiple modalities for same career → show options
   if (matched.length > 1) {
-    const baseName = matched[0].name.replace(/ Online$/, '').replace(/ Sabatina$/, '').replace(/ Presencial$/, '')
+    const baseName = matched[0].name.replace(/ Online$/, '').replace(/ Presencial$/, '')
     const lines = [`${baseName} está disponible en estas modalidades:\n`]
     matched.forEach((c) => {
       const price = formatPrice(c.monthly_price)
@@ -159,13 +159,13 @@ const STATIC_FAQS: Partial<Record<Intent, { response: string; pendingAction?: st
     pendingAction: 'show_admission_requirements',
   },
   schedule: {
-    response: 'Ofrecemos 3 modalidades:\n\n• Presencial (lun–vie)\n• En Línea (mar/jue 20–22 hrs + grabaciones)\n• Sabatina (solo sábados 8–13 hrs)\n\nTodas con el mismo título y validez SEP.',
+    response: 'Ofrecemos 2 modalidades:\n\n• Presencial (lun–vie)\n• En Línea (mar/jue 20–22 hrs + grabaciones)\n\nTodas con el mismo título y validez SEP.',
   },
   revalidation: {
     response: 'Sí contamos con proceso de equivalencias. El área de Control Escolar evalúa tu historial académico para determinar qué materias aplican. ¿Quieres que te pongamos en contacto?',
   },
   duration: {
-    response: 'La duración varía según la carrera:\n\n• Presencial: 3 a 4 años (según la carrera)\n• Sabatina: 3 años\n• En Línea: 3 años\n\nTodas incluyen prácticas profesionales y servicio social integrados en el plan de estudios.\n\n¿Te gustaría conocer las carreras disponibles en alguna modalidad?',
+    response: 'La duración varía según la carrera:\n\n• Presencial: 3 a 4 años (según la carrera)\n• En Línea: 3 años\n\nTodas incluyen prácticas profesionales y servicio social integrados en el plan de estudios.\n\n¿Te gustaría conocer las carreras disponibles en alguna modalidad?',
   },
   contact: {
     response: 'Estamos en:\n\n📍 Calle 7 Tablaje 15542 x 4 y 6, Santa Rita Cholul, Mérida, Yucatán\n📞 (999) 943 5386 / (999) 943 8897\n📧 informes@universidadlatino.edu.mx\n\nHorario de atención:\n• Lunes a Viernes: 07:00 – 21:00\n• Sábado: 08:00 – 14:00\n\n¿Te gustaría más información sobre carreras o iniciar tu proceso?',
@@ -177,13 +177,13 @@ const STATIC_FAQS: Partial<Record<Intent, { response: string; pendingAction?: st
     response: 'Contamos con convenios de colaboración e intercambio con instituciones nacionales e internacionales. Algunas de nuestras oportunidades incluyen:\n\n• Movilidad estudiantil internacional\n• Convenios con universidades extranjeras\n• Prácticas profesionales en el extranjero\n• Programas de internacionalización curricular\n\n¿Te gustaría conocer más sobre alguna carrera en particular?',
   },
   faq: {
-    response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $8,000\n• Sabatina: $3,960/mes | Inscripción: $3,600\n• En Línea: $1,980/mes | Inscripción: $3,600\n\nCostos adicionales:\n• Seguro de estudiante: $400/año (presencial)\n• Campos clínicos: $2,300–$3,000 (solo Enfermería y Nutrición)\n\nIncluido sin costo: Google Workspace, Biblioteca digital 122,000 títulos, Plataforma Moodle y 50 convenios de prácticas.',
+    response: 'Colegiaturas mensuales:\n\n• Presencial: $4,650/mes | Inscripción: $8,000\n• En Línea: $1,980/mes | Inscripción: $3,600\n\nCostos adicionales:\n• Seguro de estudiante: $400/año (presencial)\n• Campos clínicos: $2,300–$3,000 (solo Enfermería y Nutrición)\n\nIncluido sin costo: Google Workspace, Biblioteca digital 122,000 títulos, Plataforma Moodle y 50 convenios de prácticas.',
   },
   objection: {
     response: 'Entendemos que es una decisión importante. Universidad Latino cuenta con:\n\n✓ BECAS DE EXCELENCIA:\n  • 9.60–10.00: 50% de beca en colegiaturas\n  • 9.00–9.59: 40% de beca en colegiaturas\n  • 8.50–8.99: 30% de beca en colegiaturas\n  • 7.00–8.49: 50% de descuento en inscripción\n\n✓ Modalidades desde $1,980/mes (en línea)\n✓ Pago anual o semestral con descuento\n\n¿Quieres que calculemos tu costo con beca según tu promedio?',
   },
   work_study: {
-    response: 'Sí, muchos estudiantes combinan trabajo y estudio exitosamente. Opciones para ti:\n\n📱 En Línea: Clases Ma-Ju 20:00–22:00 hrs | Desde casa | $1,980/mes\n📅 Sabatina: Solo sábados 8:00–13:00 hrs | $3,960/mes\n\nAmbas con el mismo título y validez SEP. ¿Te gustaría conocer las carreras disponibles en alguna de estas modalidades?',
+    response: 'Sí, muchos estudiantes combinan trabajo y estudio exitosamente. Te recomendamos la modalidad en línea:\n\n📱 En Línea: Clases Ma-Ju 20:00–22:00 hrs | Desde casa | $1,980/mes\n\nMismo título y validez SEP que la presencial. ¿Te gustaría conocer las carreras disponibles en línea?',
   },
 }
 

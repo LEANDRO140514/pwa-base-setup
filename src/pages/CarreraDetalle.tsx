@@ -19,7 +19,6 @@ function normalizeModality(m: string): Career['modality'] {
   const map: Record<string, Career['modality']> = {
     'Presencial': 'presencial', 'presencial': 'presencial',
     'En línea': 'en-linea', 'En Línea': 'en-linea', 'en-linea': 'en-linea',
-    'Sabatina': 'sabatina', 'sabatina': 'sabatina',
   }
   return map[m] ?? 'presencial'
 }
@@ -38,11 +37,10 @@ const CAREER_IMG_HERO: Record<string, string> = {
   'Licenciatura en Enfermería':                   '/img-server/8001/04_enfermeria.webp',
   'Licenciatura en Nutrición':                    '/img-server/8001/05_nutricion.webp',
   'Lic. en Negocios Internacionales':             '/img-server/8001/06_negocios_internacionales.webp',
-  'Lic. en Ventas y Mercadotecnia':               '/img-server/8001/07_ventas_mercadotecnia.webp',
+  'Lic. en Mercadotecnia Global':               '/img-server/8001/07_ventas_mercadotecnia.webp',
   'Lic. en Ventas y Mercadotecnia (Online)':      '/img-server/8001/08_ventas_mercadotecnia_online.webp',
   'Licenciatura en Gastronomía':                  '/img-server/8001/12_gastronomia.webp',
   'Ingeniería en Sistemas Computacionales':        '/img-server/8001/11_ingenieria_sistemas.webp',
-  'Licenciatura en Administración (Sabatina)':     '/img-server/8001/09_administracion_sabatina.webp',
   'Lic. en Administración y Desarrollo Empresarial (Online)': '/img-server/8001/10_administracion_online.webp',
 }
 

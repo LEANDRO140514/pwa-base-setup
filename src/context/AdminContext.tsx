@@ -17,7 +17,7 @@ export interface Career {
   name: string
   area: string
   duration: string
-  modality: 'presencial' | 'en-linea' | 'sabatina'
+  modality: 'presencial' | 'en-linea'
   description: string
   monthlyFee?: string
   enrollment?: string
@@ -155,7 +155,7 @@ const defaultCustomValues: CustomValues = {
     },
     {
       id: '7',
-      name: 'Lic. en Ventas y Mercadotecnia',
+      name: 'Lic. en Mercadotecnia Global',
       area: 'Negocios',
       duration: '3 años 4 meses',
       modality: 'presencial',
@@ -199,18 +199,6 @@ const defaultCustomValues: CustomValues = {
       enrollment: '$8,000',
       description: 'Desarrolla 12 proyectos reales: ciberseguridad, IA, apps móviles, robótica y más. Participación en NASA Space Apps Challenge. 6 lenguajes de programación.',
       highlights: ['12 proyectos reales durante la carrera', 'NASA International Space Apps Challenge', '2 laboratorios: cómputo y robótica'],
-      active: true,
-    },
-    {
-      id: '11',
-      name: 'Licenciatura en Administración (Sabatina)',
-      area: 'Negocios',
-      duration: '3 años',
-      modality: 'sabatina',
-      monthlyFee: '$3,960/mes',
-      enrollment: '$3,600',
-      description: 'Gestión organizacional integral solo los sábados 8:00–13:00 hrs. Ideal para profesionales que trabajan y quieren obtener su título mientras aplican lo aprendido.',
-      highlights: ['Solo sábados 8:00–13:00 hrs', 'Mismo título que presencial y online', '15% más económica que presencial'],
       active: true,
     },
     {
